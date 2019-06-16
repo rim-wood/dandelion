@@ -5,6 +5,7 @@ import cn.icepear.dandelion.common.security.component.error.DandelionOAuth2Acces
 import cn.icepear.dandelion.common.security.component.error.DandelionWebResponseExceptionTranslator;
 import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import cn.icepear.dandelion.common.security.service.DandelionClientDetailsService;
+import cn.icepear.dandelion.common.security.utils.SecurityUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,14 +74,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			// AccessDeniedException指的是登陆了但是由于权限不足,
 			// 如果异常是 AccessDeniedException 且用户是匿名用户，使用 AuthenticationEntryPoint 处理
 			// 如果异常是 AccessDeniedException 且用户不是匿名用户，交给 AccessDeniedHandler 处理
-			//.accessDeniedHandler(dandelionOAuth2AccessDeniedHandler)
+			.accessDeniedHandler(dandelionOAuth2AccessDeniedHandler)
 
 			// 允许表单认证
 			// ClientCredentialsTokenEndpointFilter是Oauth2 Token Endpoint的认证端口，如果使用了这条安全过滤器，就会通过请求参数去对客户端进行认证。
 			// 规范中是允许的[但不推荐]，而更倾向推荐使用HTTP basic认证，一旦使用HTTP basic认证之后，就不需要使用这个过滤器了
 			//.allowFormAuthenticationForClients()
 
+			// 都能访问 /oauth/token_key：提供公有密匙的端点，如果你使用JWT令牌的话。
 			.tokenKeyAccess("permitAll()")
+			// 需要授权才能访问 /oauth/check_token：用于资源服务访问的令牌解析端点。
 			.checkTokenAccess("isAuthenticated()");
 	}
 

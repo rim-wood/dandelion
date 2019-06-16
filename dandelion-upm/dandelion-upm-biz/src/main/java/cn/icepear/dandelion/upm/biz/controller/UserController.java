@@ -21,4 +21,9 @@ public class UserController {
         user.setMobile("123123");
         return new R<>(user);
     }
+
+    @GetMapping("/info1")
+    public R<UserVO> getUserInfo1() throws Exception {
+        throw new Exception("123");
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,6 +26,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
  */
 @Configuration
 @EnableWebSecurity
+@Order(90)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -42,10 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@SneakyThrows
 	protected void configure(HttpSecurity http) {
 		http
-			.exceptionHandling()
-			.authenticationEntryPoint(dandelionAuthExceptionEntryPoint)
+			//.exceptionHandling()
+			//.authenticationEntryPoint(dandelionAuthExceptionEntryPoint)
 			//.accessDeniedHandler(dandelionOAuth2AccessDeniedHandler)
-			.and()
+			//.and()
 			.authorizeRequests()
 			.antMatchers(
 				"/actuator/**").permitAll()

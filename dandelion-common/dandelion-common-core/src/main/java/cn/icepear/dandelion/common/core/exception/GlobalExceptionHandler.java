@@ -91,8 +91,21 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public R methodNotAllowedExceptionHandler(HttpRequestMethodNotSupportedException exception) {
         // 打印错误信息
-        log.error("参数错误：ex={}",ThrowableUtil.getStackTrace(exception));
+        log.error("请求方式错误：ex={}",ThrowableUtil.getStackTrace(exception));
         return  R.error(CommonConstants.FAIL,"http请求方式不正确",exception.getMessage());
     }
 
+    /**
+     * http请求方法不正确 Exception
+     *
+     * @param exception
+     * @return R
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public R missingRequestParameterExceptionHandler(MissingServletRequestParameterException exception) {
+        // 打印错误信息
+        log.error("缺少请求参数：ex={}",ThrowableUtil.getStackTrace(exception));
+        return  R.error(CommonConstants.FAIL,"缺少请求参数",exception.getMessage());
+    }
 }
