@@ -35,19 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Lazy
 	@Autowired
 	private AuthorizationServerTokenServices defaultAuthorizationServerTokenServices;
-	@Autowired
-	private DandelionAuthExceptionEntryPoint dandelionAuthExceptionEntryPoint;
-	@Autowired
-	private DandelionOAuth2AccessDeniedHandler dandelionOAuth2AccessDeniedHandler;
 
 	@Override
 	@SneakyThrows
 	protected void configure(HttpSecurity http) {
 		http
-			//.exceptionHandling()
-			//.authenticationEntryPoint(dandelionAuthExceptionEntryPoint)
-			//.accessDeniedHandler(dandelionOAuth2AccessDeniedHandler)
-			//.and()
 			.authorizeRequests()
 			.antMatchers(
 				"/actuator/**").permitAll()
