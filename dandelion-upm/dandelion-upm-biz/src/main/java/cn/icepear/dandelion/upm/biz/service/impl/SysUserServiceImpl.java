@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.icepear.dandelion.common.core.constant.CommonConstants;
 import cn.icepear.dandelion.common.core.utils.StringUtils;
 import cn.icepear.dandelion.common.security.utils.SecurityUtils;
+import cn.icepear.dandelion.upm.api.domain.dto.RoleInfo;
 import cn.icepear.dandelion.upm.api.domain.dto.UserDTO;
 import cn.icepear.dandelion.upm.api.domain.dto.UserInfo;
 import cn.icepear.dandelion.upm.api.domain.entity.SysDept;
@@ -87,16 +88,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		UserInfo userInfo = new UserInfo();
 		userInfo.setSysUser(sysUser);
 		//设置角色列表  （ID）
-		List<Integer> roleIds = sysRoleService.listRolesByUserId(sysUser.getId())
+		List<RoleInfo> roles = sysRoleService.listRolesByUserId(sysUser.getId())
 			.stream()
-			.map(SysRole::getRoleId)
-			.collect(Collectors.toList());
-		userInfo.setRoles(ArrayUtil.toArray(roleIds, Integer.class));
+			.map(sysRole->{
+				RoleInfo roleInfo = new RoleInfo();
+				BeanUtils.copyProperties(sysRole,roleInfo);
+				return roleInfo;
+			}).collect(Collectors.toList());
+		userInfo.setRoles(roles);
 
 		//设置权限列表（menu.permission）
 		Set<String> permissions = new HashSet<>();
-		roleIds.forEach(roleId -> {
-			List<String> permissionList = sysMenuService.getMenuByRoleId(roleId)
+		roles.forEach(roleInfo -> {
+			List<String> permissionList = sysMenuService.getMenuByRoleId(roleInfo.getRoleId())
 				.stream()
 				.filter(menuVo -> StringUtils.isNotEmpty(menuVo.getPermission()))
 				.map(MenuVO::getPermission)

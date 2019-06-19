@@ -1,5 +1,6 @@
 package cn.icepear.dandelion.common.security.service;
 
+import cn.icepear.dandelion.upm.api.domain.dto.RoleInfo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -8,6 +9,8 @@ import org.springframework.security.core.userdetails.User;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author rimwood
@@ -24,6 +27,10 @@ public class DandelionUser extends User implements Serializable{
 	 * 部门ID
 	 */
 	private Integer deptId;
+	/**
+	 * 角色集合
+	 */
+	private List<RoleInfo> roles;
 
 	/**
 	 * Construct the <code>User</code> with the details required by
@@ -45,9 +52,10 @@ public class DandelionUser extends User implements Serializable{
 	 * @throws IllegalArgumentException if a <code>null</code> value was passed either as
 	 *                                  a parameter or as an element in the <code>GrantedAuthority</code> collection
 	 */
-	public DandelionUser(Integer id, Integer deptId, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+	public DandelionUser(Integer id, Integer deptId, List<RoleInfo> roles, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.id = id;
 		this.deptId = deptId;
+		this.roles = roles;
 	}
 }

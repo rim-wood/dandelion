@@ -1,9 +1,11 @@
 package cn.icepear.dandelion.upm.api.domain.dto;
 
+import cn.icepear.dandelion.upm.api.domain.entity.SysRole;
 import cn.icepear.dandelion.upm.api.domain.entity.SysUser;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author rim-wood
@@ -24,5 +26,5 @@ public class UserInfo implements Serializable {
     /**
      * 角色集合
      */
-    private Integer[] roles;
+    private List<RoleInfo> roles;
 }

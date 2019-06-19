@@ -74,10 +74,8 @@ public class DandelionUserDetailsService implements UserDetailsService {
 
 		UserInfo info = result.getData();
 		Set<String> dbAuthsSet = new HashSet<>();
-		if (ArrayUtil.isNotEmpty(info.getRoles())) {
-			// 获取角色
-			Arrays.stream(info.getRoles()).forEach(role -> dbAuthsSet.add(SecurityConstants.ROLE + role));
-			// 获取资源
+		if (ArrayUtil.isNotEmpty(info.getPermissions())) {
+			// 获取权限
 			dbAuthsSet.addAll(Arrays.asList(info.getPermissions()));
 
 		}
@@ -86,7 +84,7 @@ public class DandelionUserDetailsService implements UserDetailsService {
 		SysUser user = info.getSysUser();
 
 		// 构造security用户
-		return new DandelionUser(user.getId(), user.getDeptId(), user.getUserName(), SecurityConstants.BCRYPT + user.getPassword(),
+		return new DandelionUser(user.getId(), user.getDeptId(),info.getRoles(), user.getUserName(), SecurityConstants.BCRYPT + user.getPassword(),
 			StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL), true, true, true, authorities);
 	}
 }

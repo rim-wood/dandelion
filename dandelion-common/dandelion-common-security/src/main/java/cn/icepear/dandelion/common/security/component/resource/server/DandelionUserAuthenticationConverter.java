@@ -16,7 +16,7 @@ import java.util.Map;
  * @author rimwood
  * @date 2019-06-01
  * <p>
- * 根据checktoken 的结果转化用户信息
+ * 根据 checktoken 的结果转化用户信息
  */
 public class DandelionUserAuthenticationConverter implements UserAuthenticationConverter {
 	private static final String USER_ID = "user_id";
@@ -54,7 +54,7 @@ public class DandelionUserAuthenticationConverter implements UserAuthenticationC
 			String username = (String) map.get(USERNAME);
 			Integer id = (Integer) map.get(USER_ID);
 			Integer deptId = (Integer) map.get(DEPT_ID);
-			DandelionUser user = new DandelionUser(id, deptId, username, N_A, true
+			DandelionUser user = new DandelionUser(id, deptId,null, username, N_A, true
 				, true, true, true, authorities);
 			return new UsernamePasswordAuthenticationToken(user, N_A, authorities);
 		}
