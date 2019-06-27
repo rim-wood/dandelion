@@ -19,10 +19,11 @@ public class DandelionAuth2ExceptionSerializer extends StdSerializer<DandelionOA
     @Override
     @SneakyThrows
     public void serialize(DandelionOAuth2Exception value, JsonGenerator gen, SerializerProvider provider) {
+
         gen.writeStartObject();
         gen.writeObjectField("code", CommonConstants.FAIL);
         gen.writeStringField("msg", value.getMessage());
-        gen.writeStringField("data", value.getErrorCode());
+        gen.writeStringField("data", "");
         gen.writeEndObject();
     }
 }

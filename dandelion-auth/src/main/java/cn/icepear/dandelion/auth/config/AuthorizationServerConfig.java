@@ -5,8 +5,6 @@ import cn.icepear.dandelion.common.security.component.error.DandelionOAuth2Acces
 import cn.icepear.dandelion.common.security.component.error.DandelionWebResponseExceptionTranslator;
 import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import cn.icepear.dandelion.common.security.service.DandelionClientDetailsService;
-import cn.icepear.dandelion.common.security.utils.SecurityUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +19,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
@@ -52,6 +51,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private DandelionOAuth2AccessDeniedHandler dandelionOAuth2AccessDeniedHandler;
 
+	@Bean
+	public ClientDetailsService dandelionClientDetailsService(DataSource dataSource){
+		DandelionClientDetailsService clientDetailsService = new DandelionClientDetailsService(dataSource);
+		clientDetailsService.setSelectClientDetailsSql(SecurityConstants.DEFAULT_SELECT_STATEMENT);
+		clientDetailsService.setFindClientDetailsSql(SecurityConstants.DEFAULT_FIND_STATEMENT);
+		return clientDetailsService;
+	}
 	/**
 	 * 自定义 oauth2 client 的实现
 	 * @param clients
@@ -59,14 +65,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Override
 	@SneakyThrows
 	public void configure(ClientDetailsServiceConfigurer clients) {
-		DandelionClientDetailsService clientDetailsService = new DandelionClientDetailsService(dataSource);
-		clientDetailsService.setSelectClientDetailsSql(SecurityConstants.DEFAULT_SELECT_STATEMENT);
-		clientDetailsService.setFindClientDetailsSql(SecurityConstants.DEFAULT_FIND_STATEMENT);
-		clients.withClientDetails(clientDetailsService);
+		clients.withClientDetails(dandelionClientDetailsService(dataSource));
 	}
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
+
 		oauthServer
 			// AuthenticationException指的是未登录状态下访问受保护资源,如果异常是 AuthenticationException，使用 AuthenticationEntryPoint 处理
 			.authenticationEntryPoint(dandelionAuthExceptionEntryPoint)
@@ -75,7 +79,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			// 如果异常是 AccessDeniedException 且用户是匿名用户，使用 AuthenticationEntryPoint 处理
 			// 如果异常是 AccessDeniedException 且用户不是匿名用户，交给 AccessDeniedHandler 处理
 			.accessDeniedHandler(dandelionOAuth2AccessDeniedHandler)
-
 			// 允许表单认证
 			// ClientCredentialsTokenEndpointFilter是Oauth2 Token Endpoint的认证端口，如果使用了这条安全过滤器，就会通过请求参数去对客户端进行认证。
 			// 规范中是允许的[但不推荐]，而更倾向推荐使用HTTP basic认证，一旦使用HTTP basic认证之后，就不需要使用这个过滤器了

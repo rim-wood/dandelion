@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,16 +47,11 @@ public class DandelionUserDetailsService implements UserDetailsService {
 	 * @throws UsernameNotFoundException
 	 */
 	@Override
+	@Cacheable(value = SecurityConstants.USER_DETAILS_KEY, key = "#username", unless = "#result == null")
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		DandelionUser dandelionUser = redisUtils.get(username,DandelionUser.class);
-		if (dandelionUser != null) {
-			return dandelionUser;
-		}
-
 		R<UserInfo> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
 		if(result.getCode()==0){
 			DandelionUser userDetails = getUserDetails(result);
-			redisUtils.set(username, userDetails);
 			return userDetails;
 		}
 		throw new UsernameNotFoundException(username);

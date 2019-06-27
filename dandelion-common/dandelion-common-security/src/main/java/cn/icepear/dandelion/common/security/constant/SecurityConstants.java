@@ -56,6 +56,11 @@ public interface SecurityConstants {
 	String CLIENT_DETAILS_KEY = PROJECT_PREFIX + OAUTH_PREFIX + "client:details";
 
 	/**
+	 * oauth 客户端信息
+	 */
+	String USER_DETAILS_KEY = PROJECT_PREFIX + OAUTH_PREFIX + "user:details";
+
+	/**
 	 * {bcrypt} 加密的特征码
 	 */
 	String BCRYPT = "{bcrypt}";

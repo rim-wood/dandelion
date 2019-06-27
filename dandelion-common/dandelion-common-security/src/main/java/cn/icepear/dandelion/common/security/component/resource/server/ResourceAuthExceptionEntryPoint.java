@@ -34,10 +34,10 @@ public class ResourceAuthExceptionEntryPoint implements AuthenticationEntryPoint
 		response.setCharacterEncoding(CommonConstants.UTF8);
 		response.setContentType(CommonConstants.CONTENT_TYPE);
 		R<String> result = new R<>();
-		result.setCode(HttpStatus.HTTP_UNAUTHORIZED);
+		result.setCode(CommonConstants.FAIL);
 		if (authException != null) {
-			result.setMsg("error");
-			result.setData(authException.getMessage());
+			result.setMsg(authException.getMessage());
+			result.setData("");
 		}
 		response.setStatus(HttpStatus.HTTP_UNAUTHORIZED);
 		PrintWriter printWriter = response.getWriter();

@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.codec.Base64;
@@ -73,19 +70,25 @@ public class DandelionRemoteTokenServices implements ResourceServerTokenServices
         formData.add(tokenName, accessToken);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", getAuthorizationHeader(clientId, clientSecret));
-        Map<String, Object> map = postForMap(checkTokenEndpointUrl, formData, headers);
-
-        if (map.containsKey("code")&&!map.get("code").equals(0)) {
+        //请求check_token 校验token合法性
+        ResponseEntity<Map> res = postForResponse(checkTokenEndpointUrl, formData, headers);
+        @SuppressWarnings("rawtypes")
+        Map map = res.getBody();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> result = map;
+        //错误抛出异常
+        boolean error = !HttpStatus.OK.equals(res.getStatusCode())||(map.containsKey("code")&&!map.get("code").equals(0));
+        if (error) {
             if (log.isDebugEnabled()) {
                 log.debug("check_token returned error: " + map.get("error"));
             }
-            throw new InvalidTokenException(accessToken);
+            throw new InvalidTokenException("无效的token: " + accessToken);
         }
 
         // gh-838
         if (map.containsKey("active") && !"true".equals(String.valueOf(map.get("active")))) {
             log.debug("check_token returned active attribute: " + map.get("active"));
-            throw new InvalidTokenException(accessToken);
+            throw new InvalidTokenException("无效的token: " + accessToken);
         }
 
         return tokenConverter.extractAuthentication(map);
@@ -111,15 +114,11 @@ public class DandelionRemoteTokenServices implements ResourceServerTokenServices
         }
     }
 
-    private Map<String, Object> postForMap(String path, MultiValueMap<String, String> formData, HttpHeaders headers) {
+    private ResponseEntity<Map> postForResponse(String path, MultiValueMap<String, String> formData, HttpHeaders headers) {
         if (headers.getContentType() == null) {
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         }
-        @SuppressWarnings("rawtypes")
-        Map map = restTemplate.exchange(path, HttpMethod.POST,
-                new HttpEntity<MultiValueMap<String, String>>(formData, headers), Map.class).getBody();
-        @SuppressWarnings("unchecked")
-        Map<String, Object> result = map;
-        return result;
+        return restTemplate.exchange(path, HttpMethod.POST,
+                new HttpEntity<MultiValueMap<String, String>>(formData, headers), Map.class);
     }
 }

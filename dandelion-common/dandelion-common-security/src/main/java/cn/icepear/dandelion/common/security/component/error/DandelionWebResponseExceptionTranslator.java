@@ -1,5 +1,6 @@
 package cn.icepear.dandelion.common.security.component.error;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.io.IOException;
  * @date Created on 2019/6/3.
  */
 @Component
+@Slf4j
 public class DandelionWebResponseExceptionTranslator  implements WebResponseExceptionTranslator<OAuth2Exception> {
     private ThrowableAnalyzer throwableAnalyzer = new DefaultThrowableAnalyzer();
 
@@ -89,13 +91,14 @@ public class DandelionWebResponseExceptionTranslator  implements WebResponseExce
 
     private DandelionOAuth2Exception msgToCN(OAuth2Exception e){
         String errorCode = e.getOAuth2ErrorCode();
+        log.debug("DandelionWebResponseExceptionTranslator exception info is {}",e.getMessage());
         switch (errorCode){
             case OAuth2Exception.INVALID_CLIENT:
                 return new DandelionOAuth2Exception("无效的客户端凭证", e.getOAuth2ErrorCode());
             case OAuth2Exception.UNAUTHORIZED_CLIENT:
                 return new DandelionOAuth2Exception("客户端未被授权使用此方法请求授权码", e.getOAuth2ErrorCode());
             case OAuth2Exception.INVALID_GRANT:
-                return new DandelionOAuth2Exception("授权类型无效或非法不允许", e.getOAuth2ErrorCode());
+                return new DandelionOAuth2Exception(e.getMessage()!=""?e.getMessage():"授权类型无效或非法不允许", e.getOAuth2ErrorCode());
             case OAuth2Exception.INVALID_SCOPE:
                 return new DandelionOAuth2Exception("请求的scope无效或超出应用许可范围", e.getOAuth2ErrorCode());
             case OAuth2Exception.INVALID_TOKEN:
@@ -111,7 +114,7 @@ public class DandelionWebResponseExceptionTranslator  implements WebResponseExce
             case OAuth2Exception.ACCESS_DENIED:
                 return new DandelionOAuth2Exception("资源所有者或授权服务器拒绝该请求", e.getOAuth2ErrorCode());
             case "unauthorized":
-                return new DandelionOAuth2Exception("授权失败", e.getOAuth2ErrorCode());
+                return new DandelionOAuth2Exception(e.getMessage()!=""?e.getMessage():"授权失败", e.getOAuth2ErrorCode());
             default:
                 return new DandelionOAuth2Exception(e.getMessage(), e.getOAuth2ErrorCode());
         }
