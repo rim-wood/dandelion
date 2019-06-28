@@ -69,6 +69,7 @@ redirect_uri 一般都是第三方自定义的登录界面，会通过js截取co
 - 拿到code以后，就可以调用/oauth/token
 
 POST/GET http://client:secret@localhost:8080/oauth/token 来换取access_token
+
 请求头：
 
     Authorization：Basic aG9zOmhvcw==

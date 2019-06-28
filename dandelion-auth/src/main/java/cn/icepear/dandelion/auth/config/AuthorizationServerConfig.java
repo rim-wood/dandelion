@@ -1,5 +1,6 @@
 package cn.icepear.dandelion.auth.config;
 
+import cn.icepear.dandelion.common.security.component.DandelionUserAuthenticationConverter;
 import cn.icepear.dandelion.common.security.component.error.DandelionAuthExceptionEntryPoint;
 import cn.icepear.dandelion.common.security.component.error.DandelionOAuth2AccessDeniedHandler;
 import cn.icepear.dandelion.common.security.component.error.DandelionWebResponseExceptionTranslator;
@@ -20,8 +21,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
@@ -92,11 +95,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+		DefaultAccessTokenConverter accessTokenConverter = new DefaultAccessTokenConverter();
+		UserAuthenticationConverter userTokenConverter = new DandelionUserAuthenticationConverter();
+		accessTokenConverter.setUserTokenConverter(userTokenConverter);
+
 		endpoints
 			.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
 			.tokenStore(tokenStore())
 			.tokenEnhancer(tokenEnhancer())
 			.userDetailsService(userDetailsService)
+			.accessTokenConverter(accessTokenConverter)
 			.authenticationManager(authenticationManager)
 			.reuseRefreshTokens(false)
 			.exceptionTranslator(dandelionWebResponseExceptionTranslator);

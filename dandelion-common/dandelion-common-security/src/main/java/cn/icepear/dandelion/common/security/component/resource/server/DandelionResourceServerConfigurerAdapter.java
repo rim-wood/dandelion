@@ -1,6 +1,7 @@
 package cn.icepear.dandelion.common.security.component.resource.server;
 
 import cn.icepear.dandelion.common.core.config.FilterIgnorePropertiesConfig;
+import cn.icepear.dandelion.common.security.component.DandelionUserAuthenticationConverter;
 import cn.icepear.dandelion.common.security.component.error.DandelionOAuth2AccessDeniedHandler;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author rim-wood

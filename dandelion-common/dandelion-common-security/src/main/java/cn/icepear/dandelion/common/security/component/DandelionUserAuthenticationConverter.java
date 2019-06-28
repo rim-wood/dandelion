@@ -1,6 +1,7 @@
-package cn.icepear.dandelion.common.security.component.resource.server;
+package cn.icepear.dandelion.common.security.component;
 
 import cn.icepear.dandelion.common.security.service.DandelionUser;
+import cn.icepear.dandelion.upm.api.domain.dto.RoleInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,18 +11,19 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author rimwood
+ * @description convertUserAuthentication构建checktoken的返回结果，extractAuthentication根据 checktoken 的结果转化用户信息
  * @date 2019-06-01
- * <p>
- * 根据 checktoken 的结果转化用户信息
  */
 public class DandelionUserAuthenticationConverter implements UserAuthenticationConverter {
 	private static final String USER_ID = "user_id";
 	private static final String DEPT_ID = "dept_id";
 	private static final String TENANT_ID = "tenant_id";
+	private static final String ROLES = "roles";
 	private static final String N_A = "N/A";
 
 	/**
@@ -33,7 +35,10 @@ public class DandelionUserAuthenticationConverter implements UserAuthenticationC
 	@Override
 	public Map<String, ?> convertUserAuthentication(Authentication authentication) {
 		Map<String, Object> response = new LinkedHashMap<>();
+		DandelionUser dandelionUser = (DandelionUser) authentication.getPrincipal();
+		response.put(USER_ID,dandelionUser.getId());
 		response.put(USERNAME, authentication.getName());
+		response.put(ROLES,dandelionUser.getRoles());
 		if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
 			response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
 		}
@@ -54,7 +59,8 @@ public class DandelionUserAuthenticationConverter implements UserAuthenticationC
 			String username = (String) map.get(USERNAME);
 			Integer id = (Integer) map.get(USER_ID);
 			Integer deptId = (Integer) map.get(DEPT_ID);
-			DandelionUser user = new DandelionUser(id, deptId,null, username, N_A, true
+			List<RoleInfo> roles = (List<RoleInfo>) map.get(ROLES);
+			DandelionUser user = new DandelionUser(id, deptId,roles, username, N_A, true
 				, true, true, true, authorities);
 			return new UsernamePasswordAuthenticationToken(user, N_A, authorities);
 		}
