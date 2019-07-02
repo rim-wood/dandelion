@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
  * @description 自定义 OAuth2 异常
  * @date Created on 2019/6/3.
  */
-@JsonSerialize(using = DandelionAuth2ExceptionSerializer.class)
+@JsonSerialize(using = DandelionOAuth2ExceptionSerializer.class)
 public class DandelionOAuth2Exception extends OAuth2Exception{
     @Getter
     @Setter

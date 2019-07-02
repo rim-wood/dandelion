@@ -1,10 +1,5 @@
 package cn.icepear.dandelion.common.security.component.error;
 
-import cn.hutool.http.HttpStatus;
-import cn.icepear.dandelion.common.core.constant.CommonConstants;
-import cn.icepear.dandelion.common.core.utils.R;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -18,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * @author rim-wood

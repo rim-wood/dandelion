@@ -11,8 +11,8 @@ import lombok.SneakyThrows;
  * @description 返回异常时，需要统一返回跟R一致的对象，所以需要序列化转化 OAuth2Exception
  * @date Created on 2019/6/3.
  */
-public class DandelionAuth2ExceptionSerializer extends StdSerializer<DandelionOAuth2Exception> {
-    public DandelionAuth2ExceptionSerializer() {
+public class DandelionOAuth2ExceptionSerializer extends StdSerializer<DandelionOAuth2Exception> {
+    public DandelionOAuth2ExceptionSerializer() {
         super(DandelionOAuth2Exception.class);
     }
 

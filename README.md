@@ -31,6 +31,7 @@
 
 使用postman或者其他工具访问 **http://localhost:8080/oauth/token**
 因为禁用了采用表单认证client正确性，采用的是请求头加入Authorization，值是client_id+client_secret经过Base64加密
+
 请求头：
 
     Authorization：Basic aG9zOmhvcw==
