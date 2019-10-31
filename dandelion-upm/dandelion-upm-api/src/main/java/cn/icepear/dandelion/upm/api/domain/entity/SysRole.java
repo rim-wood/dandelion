@@ -57,6 +57,11 @@ public class SysRole extends Model<SysRole> {
 	 */
 	private String updator;
 	/**
+	 * 是否系统默认角色
+	 */
+	private Integer sysDefault;
+
+	/**
 	 * 0--正常 1--删除
 	 */
 	@TableLogic

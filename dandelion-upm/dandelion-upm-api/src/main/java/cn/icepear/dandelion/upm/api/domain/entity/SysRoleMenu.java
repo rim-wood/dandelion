@@ -28,4 +28,12 @@ public class SysRoleMenu extends Model<SysRoleMenu> {
 	 * 菜单ID
 	 */
 	private Integer menuId;
+
+	public SysRoleMenu() {
+	}
+
+	public SysRoleMenu(Integer roleId, Integer menuId) {
+		this.roleId = roleId;
+		this.menuId = menuId;
+	}
 }

@@ -65,16 +65,7 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
   type-enums-package: cn.icepear.dandelion.upm.**.enums
-dubbo:
-  scan:
-    base-packages: cn.icepear.dandelion.upm.api.remote
-  application:
-    name: dandelion-upm
-  protocol:
-    name: dubbo
-    port: 18008
-  registry:
-    address: N/A
+
 security:
   oauth2:
     sso:

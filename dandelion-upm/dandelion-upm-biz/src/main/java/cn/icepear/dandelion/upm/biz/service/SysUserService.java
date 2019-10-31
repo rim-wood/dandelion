@@ -25,13 +25,21 @@ public interface SysUserService extends IService<SysUser> {
 	UserInfo getUserInfo(SysUser sysUser);
 
 	/**
+	 * 按用户名查询用户信息
+	 * @param userName
+	 * @return
+	 */
+	UserVO getUserVoByUserName(String userName);
+
+	/**
 	 * 分页查询用户信息（含有角色信息）
 	 *
 	 * @param page    分页对象
-	 * @param userDTO 参数列表
+	 * @param userName 用户名
+	 * @param deptId  要查看的机构编号
 	 * @return
 	 */
-	IPage getUserWithRolePage(Page page, UserDTO userDTO);
+	IPage<List<UserVO>> getUserWithRolePage(Page page, String userName,Integer deptId);
 
 	/**
 	 * 删除用户
@@ -80,4 +88,12 @@ public interface SysUserService extends IService<SysUser> {
 	 * @return success/fail
 	 */
 	Boolean saveUser(UserDTO userDto);
+
+	/**
+	 * 用户注册
+	 *
+	 * @param userDto DTO 对象
+	 * @return SysUser
+	 */
+	SysUser registUser(UserDTO userDto);
 }

@@ -18,14 +18,28 @@ public interface SysDeptService extends IService<SysDept> {
 	 *
 	 * @return DeptTree 树
 	 */
-	List<DeptTree> listDeptTrees();
+	List<DeptTree> getDeptTree();
+
+	/**
+	 * 查询部门树菜单
+	 *
+	 * @return DeptTree 树
+	 */
+	List<SysDept> getSysDeptList();
 
 	/**
 	 * 查询用户部门树
 	 *
 	 * @return DeptTree 树
 	 */
-	List<DeptTree> listCurrentUserDeptTrees();
+	List<DeptTree> getCurrentUserDeptTrees(Integer deptId);
+
+	/**
+	 * 查询用户部门树
+	 *
+	 * @return DeptTree 树
+	 */
+	List<SysDept> getCurrentUserSysDeptList(Integer deptId);
 
 	/**
 	 * 添加信息部门
@@ -50,5 +64,19 @@ public interface SysDeptService extends IService<SysDept> {
 	 * @return 成功、失败
 	 */
 	Boolean updateDeptById(SysDept sysDept);
+
+	/**
+	 * 获取当前用户的父级机构
+	 * @param deptId
+	 * @return
+	 */
+	List<SysDept>  getParentDeptList(Integer deptId);
+
+	/**
+	 * 根据deptId获取机构信息
+	 * @param deptId
+	 * @return
+	 */
+	SysDept getSysDeptById(Integer deptId);
 
 }

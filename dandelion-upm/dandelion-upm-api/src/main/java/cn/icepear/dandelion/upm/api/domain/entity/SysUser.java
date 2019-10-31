@@ -31,7 +31,10 @@ public class SysUser implements Serializable {
 	 * 用户名
 	 */
 	private String userName;
-
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
 	private String password;
 	/**
 	 * 随机盐
@@ -52,6 +55,11 @@ public class SysUser implements Serializable {
 	 * 头像
 	 */
 	private String avatar;
+
+	/**
+	 * 最父级机构ID
+	 */
+	private Integer grandparentDeptId;
 
 	/**
 	 * 部门ID

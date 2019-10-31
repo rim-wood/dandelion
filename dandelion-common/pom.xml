@@ -17,6 +17,7 @@
         <module>dandelion-common-core</module>
         <module>dandelion-common-log</module>
         <module>dandelion-common-security</module>
+        <module>dandelion-common-lock</module>
     </modules>
 
 </project>

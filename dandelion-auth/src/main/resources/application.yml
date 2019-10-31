@@ -14,6 +14,8 @@ server:
         io-threads:   # Number of I/O threads to create for the worker.
         max-http-post-size: 0  # Maximum size in bytes of the HTTP post content.
         worker-threads:   # Number of worker threads.
+    servlet:
+          context-path: /auth
 
 spring:
   # 环境 dev|test|prod
@@ -29,7 +31,7 @@ spring:
       max-request-size: 100MB
       enabled: true
   resources:
-    static-locations: classpath:/static/,classpath:/views/,classpath:/doc/
+    static-locations: classpath:/static/,classpath:/views/
   messages:
     basename: org.springframework.security.messages_zh_CN
 
@@ -63,6 +65,3 @@ mybatis-plus:
     cache-enabled: false
     call-setters-on-nulls: true
   type-enums-package: cn.icepear.dandelion.auth.**.enums
-dubbo:
-  application:
-    name: dandelion-auth

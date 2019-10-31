@@ -1,5 +1,4 @@
 package cn.icepear.dandelion.upm.biz.service.impl;
-
 import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import cn.icepear.dandelion.upm.api.domain.entity.SysOauthClientDetails;
 import cn.icepear.dandelion.upm.biz.mapper.SysOauthClientDetailsMapper;
@@ -7,6 +6,8 @@ import cn.icepear.dandelion.upm.biz.service.SysOauthClientDetailsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author rim-wood
@@ -29,7 +30,7 @@ public class SysOauthClientDetailsServiceImpl extends ServiceImpl<SysOauthClient
 	}
 
 	/**
-	 * 根据客户端信息
+	 * 修改客户端信息
 	 *
 	 * @param clientDetails
 	 * @return
@@ -39,4 +40,15 @@ public class SysOauthClientDetailsServiceImpl extends ServiceImpl<SysOauthClient
 	public Boolean updateClientDetailsById(SysOauthClientDetails clientDetails) {
 		return this.updateById(clientDetails);
 	}
+
+	@Override
+	public List<SysOauthClientDetails> getAllList() {
+		return this.list();
+	}
+
+	@Override
+	public Boolean saveOauthClient(SysOauthClientDetails sysOauthClientDetails) {
+		return this.save(sysOauthClientDetails);
+	}
+
 }

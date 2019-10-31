@@ -4,7 +4,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.HttpUtil;
 import cn.icepear.dandelion.common.core.constant.CommonConstants;
-import cn.icepear.dandelion.common.log.domain.SysLogEntity;
+import cn.icepear.dandelion.upm.api.domain.entity.SysLog;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -17,14 +17,14 @@ import java.util.Objects;
 /**
  * 系统日志工具类
  *
- * @author L.cm
+ * @author rimwood
  */
 public class SysLogUtils {
-	public static SysLogEntity getSysLog() {
+	public static SysLog getSysLog() {
 		HttpServletRequest request = ((ServletRequestAttributes) Objects
-			.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-		SysLogEntity sysLogEntity = new SysLogEntity();
-		sysLogEntity.setCreateBy(Objects.requireNonNull(getUsername()));
+				.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+		SysLog sysLogEntity = new SysLog();
+		sysLogEntity.setCreator(Objects.requireNonNull(getUsername()));
 		sysLogEntity.setType(CommonConstants.STATUS_NORMAL);
 		sysLogEntity.setRemoteAddr(ServletUtil.getClientIP(request));
 		sysLogEntity.setRequestUri(URLUtil.getPath(request.getRequestURI()));

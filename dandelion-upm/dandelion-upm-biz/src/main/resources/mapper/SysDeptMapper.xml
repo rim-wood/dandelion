@@ -4,25 +4,88 @@
 
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="cn.icepear.dandelion.upm.api.domain.entity.SysDept">
-		<id column="dept_id" property="deptId"/>
-		<result column="name" property="name"/>
+		<id column="dept_id" property="id"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="dept_type" property="deptType"/>
+		<result column="sort_order" property="sortOrder"/>
+		<result column="deptType" property="deptType"/>
 		<result column="create_time" property="createTime"/>
+		<result column="creator" property="creator"/>
 		<result column="update_time" property="updateTime"/>
+		<result column="updator" property="updator"/>
 		<result column="del_flag" property="delFlag"/>
 	</resultMap>
 
+
+
 	<!-- 通用查询结果列 -->
 	<sql id="Base_Column_List">
-        dept_id AS deptId, parent_id AS parentId, name, sort, create_time AS createTime, update_time AS updateTime, del_flag AS delFlag
-    </sql>
+		dept_id AS deptId, parent_id AS parentId, name, sort, create_time AS createTime, update_time AS updateTime, del_flag AS delFlag
+	</sql>
 
-	<!--关联查询部门列表-->
-	<select id="listDepts" resultType="SysDept">
+	<!--部门列表树结果定义-->
+	<resultMap id="deptTreeMap" type="cn.icepear.dandelion.upm.api.domain.dto.DeptTree">
+		<id column="dept_id" property="id"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="dept_type" property="deptType"/>
+		<result column="sort_order" property="sortOrder"/>
+		<result column="deptType" property="deptType"/>
+		<result column="del_flag" property="delFlag"/>
+		<collection select="listDeptsChildren" column="dept_id" property="children" ofType="cn.icepear.dandelion.upm.api.domain.dto.DeptTree" />
+	</resultMap>
+
+	<!--关联查询部门列表树-->
+	<select id="listDeptsTrees" resultMap="deptTreeMap">
+		select DISTINCT * from sys_dept  where parent_id = 0 and del_flag = 0 order by sort_order asc
+	</select>
+
+	<!--查询部门列表数组结构-->
+	<select id="listDeptsTreesList" resultMap="BaseResultMap">
+		select DISTINCT * from sys_dept where  del_flag = 0 order by sort_order asc
+	</select>
+
+	<!--关联查询部门列表树子查询-->
+	<select id="listDeptsChildren" parameterType="java.lang.Long" resultMap="deptTreeMap">
+		select  * from sys_dept where  parent_id = #{parentId}  and del_flag = 0  order by sort_order asc
+	</select>
+
+	<!--父级部门列表-->
+	<select id="parentListDepts" resultMap="BaseResultMap" >
+		SELECT T2.*
+		FROM (
 		SELECT
-			t.*
+		@r AS _id,
+		(SELECT @r := parent_id FROM sys_dept WHERE dept_id = _id) AS parent_id,
+		@l := @l + 1 AS sort_order
 		FROM
-			sys_dept t
-		LEFT JOIN sys_dept_relation dr ON t.dept_id = dr.descendant
-		WHERE dr.ancestor = 0
+		(SELECT @r := #{deptId}, @l := 0) vars,
+		sys_dept h
+		WHERE @r != 0) T1
+		JOIN sys_dept T2 ON T1._id = T2.dept_id
+		<where>
+			<if test="delFlag != null">
+				T2.del_flag = #{delFlag}
+			</if>
+		</where>
+		ORDER BY T1.sort_order DESC
+	</select>
+
+	<!--子级部门列表-->
+	<select id="sonListDepts" resultMap="BaseResultMap" >
+		SELECT T2.* from (
+		SELECT #{deptId} as dept_id FROM DUAL UNION ALL
+		select dept_id from (
+		  select t1.dept_id,
+		  if(find_in_set(parent_id, @pids) > 0, @pids := concat(@pids, ',', dept_id), 0) as ischild
+		  from (
+			   select dept_id,parent_id from sys_dept t where t.del_flag = 0 order by parent_id, del_flag
+			  ) t1,
+			  (select @pids := #{deptId} id) t2
+		) t3 where ischild != 0
+		) T1 LEFT JOIN sys_dept T2 ON T1.dept_id = T2.dept_id
+		WHERE T2.del_flag = 0
+		ORDER BY T2.dept_id ASC
 	</select>
 </mapper>

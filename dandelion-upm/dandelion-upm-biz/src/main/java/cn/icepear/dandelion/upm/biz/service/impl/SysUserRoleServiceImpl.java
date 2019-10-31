@@ -19,8 +19,6 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
 	 *
 	 * @param userId 用户ID
 	 * @return boolean
-	 * @author 寻欢·李
-	 * @date 2017年12月7日 16:31:38
 	 */
 	@Override
 	public Boolean removeRoleByUserId(Integer userId) {

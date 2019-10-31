@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://code.alibabatech.com/schema/dubbo
+                           http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <dubbo:reference interface="cn.icepear.dandelion.upm.api.remote.RemoteLogService" version="1.0.1" check="false" />
+
+    <!-- 将该接口暴露到dubbo中，以及配置RPC调用属性 -->
+
+
+    <!--用户服务远程调用配置-->
+    <dubbo:service interface="cn.icepear.dandelion.upm.api.remote.RemoteUserService" version="1.0.1" ref="remoteUserServiceImpl" >
+        <dubbo:method name="info" retries="3"/>
+    </dubbo:service>
+
+    <!--用户服务远程调用配置-->
+    <dubbo:service interface="cn.icepear.dandelion.upm.api.remote.RemoteLogService" version="1.0.1" ref="remoteLogServiceImpl" >
+        <dubbo:method name="saveLog" retries="2"/>
+    </dubbo:service>
+
+    <!--用户服务远程调用配置-->
+    <dubbo:service interface="cn.icepear.dandelion.upm.api.remote.RemoteDeptService" version="1.0.1" ref="remoteDeptServiceImpl" >
+    </dubbo:service>
+
+
+    <!-- 将具体的实现类加入到Spring容器中 -->
+
+    <!--用户服务远程实现-->
+    <bean id="remoteUserServiceImpl" class="cn.icepear.dandelion.upm.biz.remote.impl.RemoteUserServiceImpl" />
+
+    <!--日志记录远程实现-->
+    <bean id="remoteLogServiceImpl" class="cn.icepear.dandelion.upm.biz.remote.impl.RemoteLogServiceImpl" />
+
+    <!--第三方机构信息远程实现-->
+    <bean id="remoteDeptServiceImpl" class="cn.icepear.dandelion.upm.biz.remote.impl.RemoteDeptServiceImpl" />
+
+
+    <!-- 监控的配置 -->
+    <!--<dubbo:monitor protocol="registry"></dubbo:monitor>-->
+</beans>

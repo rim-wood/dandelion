@@ -22,5 +22,10 @@
             <artifactId>dandelion-common-core</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>cn.icepear</groupId>
+            <artifactId>dandelion-upm-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

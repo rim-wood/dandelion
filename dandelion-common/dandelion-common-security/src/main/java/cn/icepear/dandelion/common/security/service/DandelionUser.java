@@ -28,6 +28,27 @@ public class DandelionUser extends User implements Serializable{
 	 */
 	private Integer deptId;
 	/**
+	 * 部门ID
+	 */
+	private Integer grandparentDeptId;
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
+	/**
+	 * 邮箱
+	 */
+	private String email;
+
+	/**
+	 * 电话
+	 */
+	private String mobile;
+	/**
+	 * 头像
+	 */
+	private String avatar;
+	/**
 	 * 角色集合
 	 */
 	private List<RoleInfo> roles;
@@ -38,6 +59,11 @@ public class DandelionUser extends User implements Serializable{
 	 *
 	 * @param id                    用户ID
 	 * @param deptId                部门ID
+	 * @param realName              真实姓名
+	 * @param email                	邮箱
+	 * @param mobile                电话
+	 * @param avatar                头像
+	 * @param roles                 用户对应角色信息
 	 * @param username              the username presented to the
 	 *                              <code>DaoAuthenticationProvider</code>
 	 * @param password              the password that should be presented to the
@@ -52,10 +78,18 @@ public class DandelionUser extends User implements Serializable{
 	 * @throws IllegalArgumentException if a <code>null</code> value was passed either as
 	 *                                  a parameter or as an element in the <code>GrantedAuthority</code> collection
 	 */
-	public DandelionUser(Integer id, Integer deptId, List<RoleInfo> roles, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+	public DandelionUser(Integer id, Integer deptId, Integer grandparentDeptId, String realName, String email, String mobile, String avatar, List<RoleInfo> roles,
+					   String username, String password, boolean enabled, boolean accountNonExpired,
+					   boolean credentialsNonExpired, boolean accountNonLocked,
+					   Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.id = id;
 		this.deptId = deptId;
+		this.grandparentDeptId = grandparentDeptId;
+		this.realName = realName;
+		this.email = email;
+		this.mobile = mobile;
+		this.avatar = avatar;
 		this.roles = roles;
 	}
 }

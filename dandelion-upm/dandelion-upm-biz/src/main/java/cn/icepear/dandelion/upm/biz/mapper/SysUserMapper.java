@@ -1,6 +1,5 @@
 package cn.icepear.dandelion.upm.biz.mapper;
 
-import cn.icepear.dandelion.upm.api.domain.dto.UserDTO;
 import cn.icepear.dandelion.upm.api.domain.entity.SysUser;
 import cn.icepear.dandelion.upm.api.domain.vo.UserVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -21,25 +20,21 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	/**
 	 * 通过用户名查询用户信息（含有角色信息）
 	 *
-	 * @param username 用户名
+	 * @param userName 用户名
+	 * @param userId 用户编号
 	 * @return userVo
 	 */
-	UserVO getUserVoByUsername(String username);
+	UserVO getUserVoByUsernameOrId(@Param("userName") String userName,
+								   @Param("userId") Integer userId);
 
 	/**
 	 * 分页查询用户信息（含角色）
 	 *
 	 * @param page    分页
-	 * @param userDTO 查询参数
+	 * @param userName 用户名
+	 * @param deptIds  要查看的机构编号
 	 * @return list
 	 */
-	IPage<List<UserVO>> getUserVosPage(Page page, @Param("query") UserDTO userDTO);
+	IPage<List<UserVO>> getUserVosPage(Page page, @Param("userName") String userName,@Param("deptIds")List<Integer> deptIds);
 
-	/**
-	 * 通过ID查询用户信息
-	 *
-	 * @param id 用户ID
-	 * @return userVo
-	 */
-	UserVO getUserVoById(Integer id);
 }

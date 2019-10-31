@@ -1,6 +1,5 @@
 package cn.icepear.dandelion.common.security.service;
 
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.icepear.dandelion.common.core.constant.CommonConstants;
 import cn.icepear.dandelion.common.core.utils.R;
@@ -9,9 +8,9 @@ import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import cn.icepear.dandelion.upm.api.domain.dto.UserInfo;
 import cn.icepear.dandelion.upm.api.domain.entity.SysUser;
 import cn.icepear.dandelion.upm.api.remote.RemoteUserService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.Reference;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +20,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author rimwood
@@ -34,7 +30,7 @@ import java.util.Set;
 @Slf4j
 @Service("userDetailsService")
 public class DandelionUserDetailsService implements UserDetailsService {
-	@Reference(version = "1.0.0", url = "dubbo://127.0.0.1:18008")
+	@Autowired
 	private RemoteUserService remoteUserService;
 	@Autowired
 	private RedisUtils redisUtils;
@@ -48,6 +44,7 @@ public class DandelionUserDetailsService implements UserDetailsService {
 	 */
 	@Override
 	@Cacheable(value = SecurityConstants.USER_DETAILS_KEY, key = "#username", unless = "#result == null")
+	@HystrixCommand(fallbackMethod = "userInfoError")
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		R<UserInfo> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
 		if(result.getCode()==0){
@@ -57,6 +54,9 @@ public class DandelionUserDetailsService implements UserDetailsService {
 		throw new UsernameNotFoundException(username);
 	}
 
+	public UserDetails userInfoError(String username) {
+		throw new UsernameNotFoundException(username);
+	}
 	/**
 	 * 构建userdetails
 	 *
@@ -69,18 +69,15 @@ public class DandelionUserDetailsService implements UserDetailsService {
 		}
 
 		UserInfo info = result.getData();
-		Set<String> dbAuthsSet = new HashSet<>();
-		if (ArrayUtil.isNotEmpty(info.getPermissions())) {
-			// 获取权限
-			dbAuthsSet.addAll(Arrays.asList(info.getPermissions()));
 
-		}
+		//权限标识集合
 		Collection<? extends GrantedAuthority> authorities
-			= AuthorityUtils.createAuthorityList(dbAuthsSet.toArray(new String[0]));
+				= AuthorityUtils.createAuthorityList(info.getPermissions().toArray(new String[0]));
+
 		SysUser user = info.getSysUser();
 
 		// 构造security用户
-		return new DandelionUser(user.getId(), user.getDeptId(),info.getRoles(), user.getUserName(), SecurityConstants.BCRYPT + user.getPassword(),
-			StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL), true, true, true, authorities);
+		return new DandelionUser(user.getId(), user.getDeptId(),user.getGrandparentDeptId(),user.getRealName(),user.getEmail(),user.getMobile(),user.getAvatar(),info.getRoles(), user.getUserName(), SecurityConstants.BCRYPT + user.getPassword(),
+				StrUtil.equals(user.getDelFlag(), CommonConstants.STATUS_NORMAL), true, true, StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL), authorities);
 	}
 }

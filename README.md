@@ -6,11 +6,24 @@
 
 2. 提供对常见容器化支持 Docker
 
+## Future
+
+### 技术
+
+- [x] ~~task任务服务~~
+- [x] MQ支持
+- [x] ~~redis锁实现~~
+- [x] zookeeper分布式锁实现
+- [x] k8s部署
+- [x] ~~增加Hystrix组件~~
+- [x] 日志系统
+- [x] 监控系统
+
 ## 运行
 
 ### 数据库、redis
 
-1. 在other/sql目录下找到cityplatform_uaa.sql,运行sql文件，数据库为mysql
+1. 在other/sql目录下有数据库创建文件,运行sql文件，数据库为mysql
 
 2. redis为单机版即可
 

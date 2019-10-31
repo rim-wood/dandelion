@@ -8,10 +8,12 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * 日期处理
- * 
+ *
  * @author rimwood
  * @email wuliming195@gmail.com
  * @date 2018年2月21日 下午12:53:33
@@ -532,5 +534,25 @@ public final class DateUtils {
         LocalDateTime startTime = LocalDateTime.now();
         return getBetween(startTime,DateUtils.transLocalDateTime(endTime));
     }
+
+    /**
+     * 获取当前GMT时间
+     * @return
+     */
+    public static String getGMTDate(){
+        Calendar cd = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // 设置时区为GMT
+        return sdf.format(cd.getTime());
+    }
+    /**
+     * 将字符串转化为秒为单位的时间戳
+     * @return
+     */
+    public static Long dateTimeStrToLong(String dateTime) throws ParseException {
+        LocalDateTime time = transLocalDateTime(dateTime);
+        return time.toEpochSecond(ZoneOffset.of("+8"));
+    }
     /********************一些日期的计算方法end*********************/
 }
+

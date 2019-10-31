@@ -2,6 +2,7 @@ package cn.icepear.dandelion.upm.api.domain.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +12,12 @@ import java.util.List;
  * @date Created on 2019-04-18.
  */
 @Data
-public class TreeNode {
+public class TreeNode<T> implements Serializable {
 	protected int id;
 	protected int parentId;
-	protected List<TreeNode> children = new ArrayList<TreeNode>();
+	protected List<T> children = new ArrayList<T>();
 
-	public void add(TreeNode node) {
+	public void add(T node) {
 		children.add(node);
 	}
 }

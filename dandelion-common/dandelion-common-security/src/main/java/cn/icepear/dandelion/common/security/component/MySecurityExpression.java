@@ -20,8 +20,7 @@ import java.util.Collection;
 @Component("mse")
 public class MySecurityExpression {
     /**
-     * 判断接口是否有xx:xx权限
-     * //todo 需要增加具有aa:bb权限的，默认具有aa:bb:cc,aa:bb:dd或者其他，或者采用aa:bb:all这种形式
+     * 判断接口是否有xx:xx权限(具有aa:bb权限的，默认具有aa:bb:cc,aa:bb:dd或者其他，或者采用aa:bb:all这种形式也具有aa:bb:cc等权限)
      * @param permission 权限
      * @return {boolean}
      */
@@ -34,9 +33,20 @@ public class MySecurityExpression {
             return false;
         }
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String allStr = ":all";
         return authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .filter(StringUtils::hasText)
-                .anyMatch(x -> PatternMatchUtils.simpleMatch(permission, x));
+                .anyMatch(x -> {
+                    if(x.equals(permission)) return true;
+                    else {boolean result = false;
+                        int allIndex = x.indexOf(allStr);
+                        if(allIndex!=-1){
+                            x = x.substring(0, allIndex);
+                        }
+                        result = PatternMatchUtils.simpleMatch(x+":*", permission);
+                        return result;
+                    }
+                });
     }
 }

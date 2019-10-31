@@ -14,6 +14,7 @@
         <module>dandelion-common</module>
         <module>dandelion-auth</module>
         <module>dandelion-upm</module>
+        <module>dandelion-schedulejob</module>
     </modules>
 
 
@@ -36,10 +37,11 @@
         <druid.version>1.1.10</druid.version>
         <security.oauth.version>2.3.5.RELEASE</security.oauth.version>
         <security.oauth.auto.version>2.1.2.RELEASE</security.oauth.auto.version>
-        <jackson.modules>2.9.8</jackson.modules>
+        <jackson.version>2.9.8</jackson.version>
         <joda.time.version>2.9.9</joda.time.version>
         <mybatis.typehandlers-jsr310.version>1.0.2</mybatis.typehandlers-jsr310.version>
-        <dubbo-spring-boot.version>2.7.0</dubbo-spring-boot.version>
+        <dubbo.version>2.7.3</dubbo.version>
+        <quartz.version>2.3.0</quartz.version>
     </properties>
 
 
@@ -52,41 +54,21 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--引入springcloud  -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!--jackson模块-->
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-modules-java8</artifactId>
-                <version>${jackson.modules}</version>
+                <version>${jackson.version}</version>
                 <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- Aapche Dubbo  -->
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-dependencies-bom</artifactId>
-                <version>${dubbo-spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo-spring-boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                    </exclusion>
-                </exclusions>
+                <scope>runtime</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -142,16 +124,25 @@
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
             <version>${security.oauth.auto.version}</version>
         </dependency>
-        <!-- Spring Boot Dubbo 依赖 -->
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-spring-boot-starter</artifactId>
-            <version>${dubbo-spring-boot.version}</version>
-        </dependency>
+        <!--dubbo-->
         <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
         </dependency>
+        <!--服务降级服务容错 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+        <!-- Zookeeper dependencies -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-dependencies-zookeeper</artifactId>
+            <version>${dubbo.version}</version>
+            <type>pom</type>
+        </dependency>
+
         <!-- redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -230,6 +221,39 @@
     </dependencies>
 
 
+    <build>
+        <finalName>${project.name}-${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <finalName>${project.build.finalName}</finalName>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <target>${maven.compiler.target}</target>
+                    <source>${maven.compiler.source}</source>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <repositories>
         <repository>
             <id>public</id>

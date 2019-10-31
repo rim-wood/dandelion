@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author rim-wood
@@ -18,10 +19,11 @@ public class UserInfo implements Serializable {
      * 用户基本信息
      */
     private SysUser sysUser;
+
     /**
      * 权限标识集合
      */
-    private String[] permissions;
+    private Set<String> permissions;
 
     /**
      * 角色集合

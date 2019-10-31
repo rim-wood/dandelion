@@ -27,8 +27,15 @@ public class UserVO implements Serializable {
 	 * 用户名
 	 */
 	private String userName;
-
+	/**
+	 * 密码
+	 */
 	private String password;
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
+
 	/**
 	 * 随机盐
 	 */
@@ -91,6 +98,15 @@ public class UserVO implements Serializable {
 	 * 部门名称
 	 */
 	private String deptName;
+	/**
+	 * 最顶级机构ID
+	 */
+	private Integer grandparentDeptId;
+
+	/**
+	 * 最顶级机构名称
+	 */
+	private String grandparentDeptName;
 
 	/**
 	 * 角色列表

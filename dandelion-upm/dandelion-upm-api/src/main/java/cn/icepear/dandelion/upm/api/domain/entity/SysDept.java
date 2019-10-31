@@ -1,5 +1,6 @@
 package cn.icepear.dandelion.upm.api.domain.entity;
 
+import cn.icepear.dandelion.upm.api.domain.dto.DeptTree;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -77,4 +78,14 @@ public class SysDept extends Model<SysDept> {
 	@TableLogic
 	private int delFlag;
 
+	public static DeptTree sysDept2DeptTree(SysDept sysDept){
+		DeptTree deptTree = new DeptTree();
+		deptTree.setDeptName(sysDept.getDeptName());
+		deptTree.setDeptType(sysDept.getDeptType());
+		deptTree.setDelFlag(sysDept.getDelFlag());
+		deptTree.setSortOrder(sysDept.getSortOrder());
+		deptTree.setId(sysDept.getDeptId());
+		deptTree.setParentId(sysDept.getParentId());
+		return deptTree;
+	}
 }

@@ -41,7 +41,7 @@ public class SysDict extends Model<SysDict> {
 	 * 类型
 	 */
 	@NotBlank(message = "字典项数据类型不能为空")
-	private String type;
+	private String typeCode;
 	/**
 	 * 描述
 	 */
@@ -49,7 +49,7 @@ public class SysDict extends Model<SysDict> {
 	/**
 	 * 排序（升序）
 	 */
-	private Integer sort;
+	private Integer sortOrder;
 	/**
 	 * 创建时间
 	 */

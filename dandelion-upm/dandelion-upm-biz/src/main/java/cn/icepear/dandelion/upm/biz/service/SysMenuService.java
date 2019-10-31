@@ -1,8 +1,10 @@
 package cn.icepear.dandelion.upm.biz.service;
 
 
+import cn.icepear.dandelion.upm.api.domain.dto.RoleInfo;
 import cn.icepear.dandelion.upm.api.domain.entity.SysMenu;
 import cn.icepear.dandelion.upm.api.domain.vo.MenuVO;
+import cn.icepear.dandelion.upm.api.domain.vo.SystemToMenuVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -36,4 +38,22 @@ public interface SysMenuService extends IService<SysMenu> {
 	 * @return 成功、失败
 	 */
 	boolean updateMenuById(SysMenu sysMenu);
+
+
+	/**
+	 * 通过菜单id查询菜单
+	 */
+	SysMenu getMenuByMenuId(int menuId);
+
+
+	/**
+	 * 获取菜单树列表
+	 */
+	List<SystemToMenuVo> getMenuTreeList(String useName, List<RoleInfo> roles, String systemId, Boolean isAdmin);
+
+	/**
+	 * 通过菜单名与路径确认菜单
+	 */
+	SysMenu selectByName(String menuName, String path);
+
 }

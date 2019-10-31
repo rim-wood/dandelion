@@ -2,42 +2,45 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.icepear.dandelion.upm.biz.mapper.SysUserMapper">
 	<!-- 通用查询映射结果 -->
-	<resultMap id="baseResultMap" type="cn.icepear.dandelion.upm.api.domain.vo.UserVO">
-		<id column="user_id" property="userId"/>
-		<result column="username" property="username"/>
+	<resultMap id="baseResultMap" type="cn.icepear.dandelion.upm.api.domain.entity.SysUser">
+		<id column="id"  property="id"/>
+		<result column="user_name" property="userName"/>
+		<result column="real_name" property="realName"/>
 		<result column="password" property="password"/>
 		<result column="salt" property="salt"/>
-		<result column="phone" property="phone"/>
+		<result column="mobile" property="mobile"/>
+		<result column="email" property="email"/>
 		<result column="avatar" property="avatar"/>
-		<result column="wx_openid" property="wxOpenid"/>
-		<result column="qq_openid" property="qqOpenid"/>
-		<result column="ucreate_time" property="createTime"/>
-		<result column="uupdate_time" property="updateTime"/>
+		<result column="create_time" property="createTime"/>
+		<result column="creator" property="creator"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="updator" property="updator"/>
 		<result column="lock_flag" property="lockFlag"/>
 		<result column="udel_flag" property="delFlag"/>
-		<result column="deptId" property="deptId"/>
-		<result column="deptName" property="deptName"/>
-		<collection property="roleList" ofType="cn.icepear.dandelion.upm.api.domain.entity.SysRole"
-					select="cn.icepear.dandelion.upm.biz.mapper.SysRoleMapper.listRolesByUserId" column="user_id">
-		</collection>
+		<result column="grandparent_dept_id" property="grandparentDeptId"/>
+		<result column="dept_id" property="deptId"/>
 	</resultMap>
 
 	<!-- userVo结果集 -->
 	<resultMap id="userVoResultMap" type="cn.icepear.dandelion.upm.api.domain.vo.UserVO">
-		<id column="user_id" property="userId"/>
-		<result column="username" property="username"/>
+		<id column="id" property="userId"/>
+		<result column="user_name" property="userName"/>
+		<result column="real_name" property="realName"/>
 		<result column="password" property="password"/>
 		<result column="salt" property="salt"/>
-		<result column="phone" property="phone"/>
+		<result column="mobile" property="mobile"/>
+		<result column="email" property="email"/>
 		<result column="avatar" property="avatar"/>
-		<result column="wx_openid" property="wxOpenid"/>
-		<result column="qq_openid" property="qqOpenid"/>
 		<result column="ucreate_time" property="createTime"/>
+		<result column="creator" property="creator"/>
 		<result column="uupdate_time" property="updateTime"/>
+		<result column="updator" property="updator"/>
 		<result column="lock_flag" property="lockFlag"/>
 		<result column="udel_flag" property="delFlag"/>
-		<result column="deptId" property="deptId"/>
-		<result column="deptName" property="deptName"/>
+		<result column="dept_id" property="deptId"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="grandparent_dept_id" property="grandparentDeptId"/>
+		<result column="grandparent_dept_name" property="grandparentDeptName"/>
 		<collection property="roleList" ofType="cn.icepear.dandelion.upm.api.domain.entity.SysRole">
 			<id column="role_id" property="roleId"/>
 			<result column="role_name" property="roleName"/>
@@ -48,21 +51,44 @@
 		</collection>
 	</resultMap>
 
-	<sql id="userRoleSql">
-		`user`.user_id,
-		`user`.username,
+	<sql id="userSql">
+		id,
+		user_name,
+		real_name,
+		password,
+		salt,
+		mobile,
+		email,
+		avatar,
+		dept_id,
+		grandparent_dept_id,
+		create_time,
+		creator,
+		update_time,
+		updator,
+		del_flag,
+		lock_flag,
+	</sql>
+
+	<sql id="userRoleDeptSql">
+		`user`.id,
+		`user`.user_name,
+		`user`.real_name,
 		`user`.`password`,
 		`user`.salt,
-		`user`.phone,
+		`user`.mobile,
+		`user`.email,
 		`user`.avatar,
-		`user`.wx_openid,
-		`user`.qq_openid,
-		`user`.dept_id,
 		`user`.create_time AS ucreate_time,
+		`user`.creator,
 		`user`.update_time AS uupdate_time,
+		`user`.updator,
 		`user`.del_flag AS udel_flag,
 		`user`.lock_flag AS lock_flag,
-		`user`.dept_id AS deptId,
+		d.dept_name AS dept_name,
+		d.dept_id AS dept_id,
+		gd.dept_name AS grandparent_dept_name,
+		gd.dept_id AS grandparent_dept_id,
 		r.role_id,
 		r.role_name,
 		r.role_code,
@@ -71,74 +97,43 @@
 		r.update_time AS rupdate_time
 	</sql>
 
-	<sql id="userRoleDeptSql">
-		`user`.user_id,
-		`user`.username,
-		`user`.`password`,
-		`user`.salt,
-		`user`.phone,
-		`user`.avatar,
-		`user`.wx_openid,
-		`user`.qq_openid,
-		`user`.create_time AS ucreate_time,
-		`user`.update_time AS uupdate_time,
-		`user`.del_flag AS udel_flag,
-		`user`.lock_flag AS lock_flag,
-		r.role_id,
-		r.role_name,
-		r.role_code,
-		r.role_desc,
-		r.create_time AS rcreate_time,
-		r.update_time AS rupdate_time,
-		d.name AS deptName,
-		d.dept_id AS deptId
-    </sql>
-
-	<select id="getUserVoByUsername" resultMap="userVoResultMap">
-		SELECT
-		<include refid="userRoleSql"/>
-		FROM
-		sys_user AS `user`
-		LEFT JOIN sys_user_role AS ur ON ur.user_id = `user`.user_id
-		LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
-		WHERE `user`.username = #{username}
-	</select>
-
-	<select id="getUserVoById" resultMap="userVoResultMap">
+	<select id="getUserVoByUsernameOrId" resultMap="userVoResultMap">
 		SELECT
 		<include refid="userRoleDeptSql"/>
 		FROM
 		sys_user AS `user`
-		LEFT JOIN sys_user_role AS ur ON ur.user_id = `user`.user_id
+		LEFT JOIN sys_user_role AS ur ON ur.user_id = `user`.id
 		LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
 		LEFT JOIN sys_dept AS d ON d.dept_id = `user`.dept_id
-		WHERE
-		`user`.user_id = #{id}
+		LEFT JOIN sys_dept AS gd ON gd.dept_id = `user`.grandparent_dept_id
+		<where>
+			<if test="userName != null and userName != ''">
+				`user`.user_name = #{userName}
+			</if>
+			<if test="userId != null and userId != ''">
+				`user`.id = #{userId}
+			</if>
+		</where>
 	</select>
 
-	<select id="getUserVosPage" resultMap="baseResultMap">
+	<select id="getUserVosPage" resultMap="userVoResultMap">
 		SELECT
-		`user`.user_id,
-		`user`.username,
-		`user`.`password`,
-		`user`.salt,
-		`user`.phone,
-		`user`.avatar,
-		`user`.wx_openid,
-		`user`.qq_openid,
-		`user`.dept_id,
-		`user`.create_time AS ucreate_time,
-		`user`.update_time AS uupdate_time,
-		`user`.del_flag AS udel_flag,
-		`user`.lock_flag AS lock_flag,
-		`user`.dept_id AS deptId,
-		d.name AS deptName
+		<include refid="userRoleDeptSql"/>
 		FROM
 		sys_user AS `user`
+		LEFT JOIN sys_user_role AS ur ON ur.user_id = `user`.id
+		LEFT JOIN sys_role AS r ON r.role_id = ur.role_id
 		LEFT JOIN sys_dept AS d ON d.dept_id = `user`.dept_id
+		LEFT JOIN sys_dept AS gd ON gd.dept_id = `user`.grandparent_dept_id
 		<where>
-			<if test="query.username != null and query.username != ''">
-				and `user`.username LIKE CONCAT('%',#{query.username},'%')
+			<if test="userName != null and userName != ''">
+				and `user`.user_name LIKE CONCAT('%',#{userName},'%')
+			</if>
+			<if test="deptIds != null and deptIds.size() >0">
+				and d.dept_id in
+				<foreach collection="deptIds" index="index" item="deptId" open="(" separator="," close=")">
+					${deptId}
+				</foreach>
 			</if>
 		</where>
 		ORDER BY `user`.create_time DESC

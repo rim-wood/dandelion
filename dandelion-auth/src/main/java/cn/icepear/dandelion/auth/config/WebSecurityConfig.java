@@ -24,8 +24,7 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private ObjectMapper objectMapper;
+
 	@Autowired
 	private DandelionUserDetailsService userDetailsService;
 	@Lazy
@@ -36,12 +35,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@SneakyThrows
 	protected void configure(HttpSecurity http) {
 		http
-			.authorizeRequests()
-			.antMatchers(
-				"/actuator/**").permitAll()
-			.anyRequest().authenticated()
-			.and().formLogin()
-			.and().csrf().disable();
+				.authorizeRequests()
+				.antMatchers(
+						"/actuator/**", "/oauth/logout", "/**.css", "/**.js", "/images/**.png").permitAll()
+				.anyRequest().authenticated()
+				.and().formLogin().loginPage("/login").permitAll()
+//				.and().formLogin()
+				.and().csrf().disable();
 	}
 
 	/**
