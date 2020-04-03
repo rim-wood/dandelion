@@ -30,16 +30,16 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
-    @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        // 初始化缓存管理器，在这里我们可以缓存的整体过期时间等
-        // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().computePrefixWith(cacheName -> cacheName+":");
-        //config = config.entryTtl(Duration.ofSeconds(60))    // 设置缓存的默认过期时间，也是使用Duration设置
-        //        .disableCachingNullValues().;                // 不缓存空值
-        RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory).cacheDefaults(config).build();
-        return redisCacheManager;
-    }
+//    @Bean
+//    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+//        // 初始化缓存管理器，在这里我们可以缓存的整体过期时间等
+//        // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
+//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().computePrefixWith(cacheName -> cacheName+":");
+//        //config = config.entryTtl(Duration.ofSeconds(60))    // 设置缓存的默认过期时间，也是使用Duration设置
+//        //        .disableCachingNullValues().;                // 不缓存空值
+//        RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory).cacheDefaults(config).build();
+//        return redisCacheManager;
+//    }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory redisConnectionFactory) {

@@ -2,7 +2,7 @@
 
 ## 简介
 
-1. 基于 springboot、dubbo、spring-security、spring-oauth2 构建的基础RBAC权限管理微服务项目
+1. 基于 springcloud gateway、hystrix、bus、springboot、dubbo、spring-security、spring-oauth2 构建的基础微服务项目
 
 2. 提供对常见容器化支持 Docker
 
@@ -11,108 +11,124 @@
 ### 技术
 
 - [x] ~~task任务服务~~
-- [x] MQ支持
+- [x] 消息总线BUS & MQ
 - [x] ~~redis锁实现~~
-- [x] zookeeper分布式锁实现
-- [x] k8s部署
 - [x] ~~增加Hystrix组件~~
 - [x] 日志系统
 - [x] 监控系统
 
-## 运行
+## 前置条件
 
-### 数据库、redis
+### Mysql、Redis、注册中心nacos、RabbitMQ
 
-1. 在other/sql目录下有数据库创建文件,运行sql文件，数据库为mysql
-
+1. 数据库为mysql,在other/sql目录下有数据库创建文件,运行sql文件
+   
+   - 下载docker镜像 
+       ```shell script
+       docker pull mysql:5.7
+        ```
+   - 创建mysql挂载目录
+   
+       以 Windows 为例，在D盘创建三个文件夹，Linux一样
+        
+        D:/Docker/data/mysql-01/conf 存放mysql配置文件，建议将other/mysql-conf/my.cnf文件放入该目录
+        
+        D:/Docker/data/mysql-01/data 存放mysql数据库文件
+        
+        D:/Docker/data/mysql-01/log  存放mysql日志
+        
+        D:/Docker/data/mysql-01/mnt  存放初始化数据库sql文件，将other/sql/中的文件放入该目录
+   
+   - 运行docker容器
+       ```shell script
+        docker run --name mysql-01 -p 3306:3306 \
+            -e MYSQL_ROOT_PASSWORD=icepear123456 \
+            -e TZ=Asia/Shanghai \
+            -v D:/Docker/data/mysql-01/conf:/etc/mysql/conf.d \
+            -v D:/Docker/data/mysql-01/data:/var/lib/mysql \
+            -v D:/Docker/data/mysql-01/log:/var/log/mysql \
+            -v D:/Docker/data/mysql-01/mnt:/home/mysql/mnt \
+            --restart always \
+            -d mysql:5.7
+       ```
+   - 初始化数据库sql文件
+       ```shell script
+          # 进入容器
+           docker exec -it mysql-01 /bin/bash
+          # 进入数据库
+           mysql -u root -p
+          # 运行sql文件
+           source /home/mysql/mnt/dandelion_uaa.sql
+           source /home/mysql/mnt/dandelion_schedulejob.sql
+       ```
+   
 2. redis为单机版即可
+   - 下载docker镜像 
+       ```shell script
+       docker pull redis:latest
+        ```
+   - 创建redis挂载目录
+      
+      以 Windows 为例，在D盘创建三个文件夹，Linux一样
+       
+       D:/Docker/data/redis/conf/redis.conf redis配置文件，建议将other/redis-conf/redis.conf文件放入该目录
+       
+      D:/Docker/data/redis/data:/data 存放redis数据文件
+      
+   - 运行redis容器
+       ```shell script
+       docker run -p 6379:6379 \
+       -v D:/Docker/data/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf \
+       -v D:/Docker/data/redis/data:/data \
+       --name myredis --restart always -d redis
+       ```
+     
+3. nacos安装运行
+   
+   参考nacos安装方式[参考链接](https://github.com/nacos-group/nacos-docker)
+   
+   **注意：都是采用docker compose的方式运行，请先确保安装了docker compose**
+   - Github Clone项目 
+     ```
+     git clone --depth 1 https://github.com/nacos-group/nacos-docker.git
+     cd nacos-docker
+     ```
+   - 单应用模式
+     ```
+     docker-compose -f example/standalone-derby.yaml up
+     ```
+   - 用Mysql存储数据的单应用模式
+     ```
+     docker-compose -f example/standalone-mysql.yaml up
+     ```
+   - 集群高可用模式
+     ```
+     docker-compose -f example/cluster-hostname.yaml up 
+     ```
+   **使用**
+   - 服务注册
+     ```
+     curl -X PUT 'http://127.0.0.1:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&ip=20.18.7.10&port=8080'
+     ```
+   - 服务发现
+     ```
+     curl -X GET 'http://127.0.0.1:8848/nacos/v1/ns/instances?serviceName=nacos.naming.serviceName'
+     ```
+   - 配置发布
+     ```
+     curl -X POST "http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&group=test&content=helloWorld"
+     ```
+   - 获取配置
+     ```
+     curl -X GET "http://127.0.0.1:8848/nacos/v1/cs/configs?dataId=nacos.cfg.dataId&group=test"
+     ```
+   - 界面访问  
+     浏览器访问：http://127.0.0.1:8848/nacos/
 
-### 运行方式
+4. RabbitMQ安装运行
+
+ 
+### 服务运行方式
 
 1. 修改配置文件，数据库地址以及redis地址。密码方式请参考[配置文件加密方式](https://github.com/rim-wood/dandelion/tree/master/other/jasypt)
 
-2. 暂未加入zookeeper进行服务注册。所以auth服务依赖于upm服务，先启动upm服务后，再启动auth服务
-
-### 授权及鉴权
-
-授权方式依赖于数据库中**sys_oauth_client_details**表中的客户端的授权类型:(password,refresh_token,authorization_code,client_credentials)
-内部服务一般采用password方式，第三方应用则采用authorization_code方式。
-
-1. password 方式
-
-获取token通过post或者get方式
-
-使用postman或者其他工具访问 **http://localhost:8080/oauth/token**
-因为禁用了采用表单认证client正确性，采用的是请求头加入Authorization，值是client_id+client_secret经过Base64加密
-
-请求头：
-
-    Authorization：Basic aG9zOmhvcw==
-
-参数：
-
-    grant_type：password（上面提到的4种）
-    username：rim
-    password：123456
-
-结果：
-```json
-    {
-        "access_token": "1eb62e30-30ba-4f08-b6c9-af90925d6e62",
-        "token_type": "bearer",
-        "refresh_token": "8ec8b61a-d556-42db-ac68-d48af772c105",
-        "expires_in": 41097,
-        "scope": "server",
-        "license": "made in stpass"
-    }
-```
-
-2. 授权码模式
-
-授权码模式是oauth2最常见的方式，比方说你现在登录某某网站，一般都会有通过qq、微信、微博等登录方式。这就是典型的授权码模式。
-第三方在腾讯开放平台或微博开放平台申请client。申请完之后就可以通过client_id和client_secret访问授权码链接，这时腾讯或者微博会跳转一个
-登录页出来，让用户登录。登录之后跳转到第三方配置的跳转路径，url后面跟一个授权码。然后通过授权码拿到token。就可以通过token访问腾讯或者微博相应的用户资源了
-这个好处在于，不会将腾讯或者微博的用户账号密码提供给第三方。完全的跟第三方隔离开来
-
-- 获取授权码
-
-浏览器访问
-链接：localhost:8080/oauth/authorize?client_id=client&response_type=code&redirect_uri=http://www.baidu.com
-redirect_uri 一般都是第三方自定义的登录界面，会通过js截取code，然后走下面的步骤，拿到access_token后，跳转到第三方的主页。完成授权步骤
-
-- 拿到code以后，就可以调用/oauth/token
-
-POST/GET http://client:secret@localhost:8080/oauth/token 来换取access_token
-
-请求头：
-
-    Authorization：Basic aG9zOmhvcw==
-
-参数：
-
-    grant_type：authorization_code（上面提到的4种）
-    code：7EE5Hy
-
-结果：
-```json
-    {
-        "access_token": "1eb62e30-30ba-4f08-b6c9-af90925d6e62",
-        "token_type": "bearer",
-        "refresh_token": "8ec8b61a-d556-42db-ac68-d48af772c105",
-        "expires_in": 41097,
-        "scope": "server",
-        "license": "made in stpass"
-    }
-```
-
-3. 刷新access_token方式
-
-跟password方式差不多，不同的地方是，首先得拿到过access_token，然后返回结果里面有一个refresh_token，需要前端或者第三方进行保存，当access_token过期后，
-调用/oauth/token重新获取access_token。
-
-请求头依然需要
-
-参数是：
-
-    grant_type：refresh_token（上面提到的4种）
-    refresh_token：8ec8b61a-d556-42db-ac68-d48af772c105
