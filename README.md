@@ -1,12 +1,12 @@
 # 蒲公英项目
 
-## 简介
+## 一、简介
 
 1. 基于 springcloud gateway、hystrix、bus、springboot、dubbo、spring-security、spring-oauth2 构建的基础微服务项目
 
 2. 提供对常见容器化支持 Docker
 
-## Future
+## 二、Future
 
 ### 技术
 
@@ -17,11 +17,11 @@
 - [x] 日志系统
 - [x] 监控系统
 
-## 前置条件
+## 三、前置条件
 
 ### Mysql、Redis、注册中心nacos、RabbitMQ
 
-1. 数据库为mysql,在other/sql目录下有数据库创建文件,运行sql文件
+#### 1. 数据库为mysql,在other/sql目录下有数据库创建文件,运行sql文件
    
    - 下载docker镜像 
        ```shell script
@@ -62,7 +62,7 @@
            source /home/mysql/mnt/dandelion_schedulejob.sql
        ```
    
-2. redis为单机版即可
+#### 2. redis为单机版即可
    - 下载docker镜像 
        ```shell script
        docker pull redis:latest
@@ -83,7 +83,7 @@
        --name myredis --restart always -d redis
        ```
      
-3. nacos安装运行
+#### 3. nacos安装运行
    
    参考nacos安装方式[参考链接](https://github.com/nacos-group/nacos-docker)
    
@@ -125,10 +125,10 @@
    - 界面访问  
      浏览器访问：http://127.0.0.1:8848/nacos/
 
-4. RabbitMQ安装运行
+#### 4. RabbitMQ安装运行
 
  
-### 服务运行方式
+### 四、服务运行方式
 
 1. 修改配置文件，数据库地址以及redis地址。密码方式请参考[配置文件加密方式](https://github.com/rim-wood/dandelion/tree/master/other/jasypt)
 

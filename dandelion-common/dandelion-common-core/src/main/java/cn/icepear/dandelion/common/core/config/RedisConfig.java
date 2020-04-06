@@ -3,6 +3,11 @@ package cn.icepear.dandelion.common.core.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
+import org.redisson.spring.data.connection.RedissonConnectionFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -22,38 +27,46 @@ import java.time.Duration;
 /**
  * Redis配置
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-07-70 19:22
+ * @author rim-wood
+ * @description redis 配置
+ * @date Created on 2019/12/8.
  */
-@EnableCaching
+@Slf4j
 @Configuration
-public class RedisConfig extends CachingConfigurerSupport {
+@AutoConfigureAfter({RedisAutoConfiguration.class})
+public class RedisConfig{
 
-//    @Bean
-//    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-//        // 初始化缓存管理器，在这里我们可以缓存的整体过期时间等
-//        // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
-//        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().computePrefixWith(cacheName -> cacheName+":");
-//        //config = config.entryTtl(Duration.ofSeconds(60))    // 设置缓存的默认过期时间，也是使用Duration设置
-//        //        .disableCachingNullValues().;                // 不缓存空值
-//        RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory).cacheDefaults(config).build();
-//        return redisCacheManager;
-//    }
+    public RedisConfig() {
+        log.info("init redis cache and redisson config");
+    }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory redisConnectionFactory) {
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        // 初始化缓存管理器，在这里我们可以缓存的整体过期时间等
+        // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().computePrefixWith(cacheName -> cacheName+":");
+        config = config.entryTtl(Duration.ofHours(1))    // 设置缓存的默认过期时间，也是使用Duration设置
+                .disableCachingNullValues();                // 不缓存空值
+        RedisCacheManager redisCacheManager = RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
+        return redisCacheManager;
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer=new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-
         jackson2JsonRedisSerializer.setObjectMapper(om);
+
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
@@ -84,4 +97,9 @@ public class RedisConfig extends CachingConfigurerSupport {
         return redisTemplate.opsForZSet();
     }
 
+
+    @Bean(name = "redissonConnectionFactory")
+    public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redisson) {
+        return new RedissonConnectionFactory(redisson);
+    }
 }

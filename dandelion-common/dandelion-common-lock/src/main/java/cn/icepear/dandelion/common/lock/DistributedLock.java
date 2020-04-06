@@ -9,7 +9,7 @@ public interface DistributedLock {
 
     public static final long TIMEOUT_MILLIS = 30000;
 
-    public static final int RETRY_TIMES = Integer.MAX_VALUE;
+    public static final int RETRY_TIMES = 0;
 
     public static final long SLEEP_MILLIS = 500;
 
@@ -25,6 +25,6 @@ public interface DistributedLock {
 
     public boolean lock(String key, long expire, int retryTimes, long sleepMillis);
 
-    public boolean releaseLock(String key);
+    public void releaseLock(String key);
 
 }

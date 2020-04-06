@@ -25,7 +25,7 @@ public class RedisDistributedLockAspect {
     public static final String LOCK_NAME_PREFIX = "lock:";
 
     @Autowired
-    private DistributedLock redisDistributedLock;
+    private DistributedLock redissonDistributedLock;
 
     @Autowired
     private BusinessKeyProvider businessKeyProvider;
@@ -45,7 +45,7 @@ public class RedisDistributedLockAspect {
         String key = LOCK_NAME_PREFIX+getName(redisLock.name(), signature)+businessKeyName;
 
         int retryTimes = redisLock.action().equals(RedisLock.LockFailAction.CONTINUE) ? redisLock.retryTimes() : 0;
-        boolean lock = redisDistributedLock.lock(key, redisLock.keepMills(), retryTimes, redisLock.sleepMills());
+        boolean lock = redissonDistributedLock.lock(key, redisLock.keepMills(), retryTimes, redisLock.sleepMills());
         if(!lock) {
             log.debug("get lock failed : " + key);
             return null;
@@ -58,8 +58,8 @@ public class RedisDistributedLockAspect {
         } catch (Exception e) {
             log.error("execute locked method occured an exception", e);
         } finally {
-            boolean releaseResult = redisDistributedLock.releaseLock(key);
-            log.debug("release lock : " + key + (releaseResult ? " success" : " failed"));
+            redissonDistributedLock.releaseLock(key);
+            log.debug("release lock : " + key + " success");
         }
         return null;
     }

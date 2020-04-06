@@ -13,6 +13,6 @@
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="-1" />
 
-    <!-- 这里使用的注册中心是zookeeper -->
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+    <!-- 这里使用的注册中心是nacos -->
+    <dubbo:registry address="nacos://127.0.0.1:8848"/>
 </beans>
