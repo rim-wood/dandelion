@@ -20,6 +20,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
@@ -33,6 +35,7 @@ import java.time.Duration;
  */
 @Slf4j
 @Configuration
+@EnableCaching
 @AutoConfigureAfter({RedisAutoConfiguration.class})
 public class RedisConfig{
 
@@ -46,6 +49,10 @@ public class RedisConfig{
         // 生成一个默认配置，通过config对象即可对缓存进行自定义配置
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig().computePrefixWith(cacheName -> cacheName+":");
         config = config.entryTtl(Duration.ofHours(1))    // 设置缓存的默认过期时间，也是使用Duration设置
+                // 设置 key为string序列化
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                // 设置value为json序列化
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer()))
                 .disableCachingNullValues();                // 不缓存空值
         RedisCacheManager redisCacheManager = RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(config).build();
         return redisCacheManager;
@@ -53,23 +60,28 @@ public class RedisConfig{
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer=new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer());
 
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer());
 
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisSerializer<Object> jackson2JsonRedisSerializer() {
+        //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+        return jackson2JsonRedisSerializer;
     }
 
     @Bean
@@ -98,8 +110,4 @@ public class RedisConfig{
     }
 
 
-    @Bean(name = "redissonConnectionFactory")
-    public RedissonConnectionFactory redissonConnectionFactory(RedissonClient redisson) {
-        return new RedissonConnectionFactory(redisson);
-    }
 }

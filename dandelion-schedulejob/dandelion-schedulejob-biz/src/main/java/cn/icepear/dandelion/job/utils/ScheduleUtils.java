@@ -1,9 +1,8 @@
 package cn.icepear.dandelion.job.utils;
 
+import cn.icepear.dandelion.common.core.constant.CommonConstants;
+import cn.icepear.dandelion.common.core.exception.CustomException;
 import cn.icepear.dandelion.job.domain.entity.ScheduleJobEntity;
-import com.stpass.cityplatform.hoslink.common.core.constant.CommonConstants;
-import com.stpass.cityplatform.hoslink.common.core.exception.CustomException;
-import com.stpass.cityplatform.hoslink.job.domain.entity.ScheduleJobEntity;
 import org.quartz.*;
 
 /**

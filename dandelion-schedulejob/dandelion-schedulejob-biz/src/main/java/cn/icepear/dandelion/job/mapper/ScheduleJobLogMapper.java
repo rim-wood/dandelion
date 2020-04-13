@@ -2,7 +2,6 @@ package cn.icepear.dandelion.job.mapper;
 
 import cn.icepear.dandelion.job.domain.entity.ScheduleJobLogEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.stpass.cityplatform.hoslink.job.domain.entity.ScheduleJobLogEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

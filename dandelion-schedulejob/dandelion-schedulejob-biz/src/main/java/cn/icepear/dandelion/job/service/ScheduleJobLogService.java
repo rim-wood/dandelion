@@ -1,9 +1,9 @@
 package cn.icepear.dandelion.job.service;
 
+import cn.icepear.dandelion.job.domain.entity.ScheduleJobLogEntity;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.stpass.cityplatform.hoslink.job.domain.entity.ScheduleJobLogEntity;
 
 /**
  * @author rimwood

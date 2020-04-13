@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="main.css">
+  <title>登录</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <div class="logo"></div><span>冰梨微服务基础平台</span>
+      </div>
+    </div>
+    <div class="content">
+      <div class="display">
+        <div></div>
+        <div>冰梨微服务基础平台</div>
+        <div>SpringBoot、Dubbo、Oauth2、Mybatis、Hystrix、zookeeper、redis、RocketMQ、分布式锁、分布式事务、docker</div>
+      </div>
+      <form class="login"  method="post" action="/auth/login">
+        <p>账号登录</p>
+        <div>
+          <div><input id="username" name="username" placeholder="请输入用户名" autofocus="" /></div>
+          <div><input type="password" id="password" name="password" placeholder="请输入密码" /></div>
+          <div>
+            <button type="submit" style="font-size: 18px;color: #ffffff;">
+              登录
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>COPYRIGHT @ 2020 icepear版权所有</div>
+  </div>
+</body>
+
+</html>

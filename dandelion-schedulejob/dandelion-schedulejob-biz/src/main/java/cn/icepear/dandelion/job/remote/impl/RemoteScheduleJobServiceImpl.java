@@ -1,7 +1,6 @@
 package cn.icepear.dandelion.job.remote.impl;
 
 import cn.icepear.dandelion.job.remote.RemoteScheduleJobService;
-import com.stpass.cityplatform.hoslink.job.remote.RemoteScheduleJobService;
 
 /**
  * @author rim-wood

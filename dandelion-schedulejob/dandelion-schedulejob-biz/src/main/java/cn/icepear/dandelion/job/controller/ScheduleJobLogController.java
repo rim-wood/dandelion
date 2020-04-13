@@ -1,10 +1,10 @@
 package cn.icepear.dandelion.job.controller;
 
+import cn.icepear.dandelion.common.core.utils.R;
+import cn.icepear.dandelion.job.domain.entity.ScheduleJobLogEntity;
+import cn.icepear.dandelion.job.service.ScheduleJobLogService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.stpass.cityplatform.hoslink.common.core.utils.R;
-import com.stpass.cityplatform.hoslink.job.domain.entity.ScheduleJobLogEntity;
-import com.stpass.cityplatform.hoslink.job.service.ScheduleJobLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

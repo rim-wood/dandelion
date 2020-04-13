@@ -249,7 +249,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'rim', 'rim', '$2a$10$RpFJjxYiXdEsAGnWp/8fsOetMuOON96Ntk/Ym2M/RKRyU0GZseaDC', 'rim', null, null, null, '1', '0', null, null, '2019-05-28 15:43:02', null, '0');
+INSERT INTO `sys_user` VALUES ('1', 'rim', 'rim', '$2a$10$RpFJjxYiXdEsAGnWp/8fsOetMuOON96Ntk/Ym2M/RKRyU0GZseaDC', 'rim', null, null, null,  '0','1', '0', null, null, '2019-05-28 15:43:02', null, '0');
 
 -- ----------------------------
 -- Table structure for sys_user_role

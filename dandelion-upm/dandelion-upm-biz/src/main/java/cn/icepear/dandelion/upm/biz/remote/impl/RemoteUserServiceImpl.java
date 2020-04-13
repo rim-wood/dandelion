@@ -1,6 +1,7 @@
 package cn.icepear.dandelion.upm.biz.remote.impl;
 
 import cn.icepear.dandelion.common.core.utils.R;
+import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import cn.icepear.dandelion.upm.api.domain.dto.UserInfo;
 import cn.icepear.dandelion.upm.api.domain.entity.SysUser;
 import cn.icepear.dandelion.upm.api.remote.RemoteUserService;
@@ -10,6 +11,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  * @author rim-wood
@@ -21,10 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RemoteUserServiceImpl implements RemoteUserService {
     @Autowired
     private SysUserService sysUserService;
+
     @Override
     @HystrixCommand(commandProperties = {
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "4000") })
+    @Cacheable(value = SecurityConstants.USER_DETAILS_KEY, key = "#username", unless = "#result == null")
     public R<UserInfo> info(String username, String from) {
         SysUser sysUser = sysUserService.getOne(new QueryWrapper<SysUser>().eq("user_name",username));
         if(sysUser!=null) {

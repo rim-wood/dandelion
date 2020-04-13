@@ -11,9 +11,10 @@
 
     <artifactId>dandelion-auth</artifactId>
     <packaging>pom</packaging>
-    <description>医院联网鉴权服务</description>
+    <description>鉴权服务</description>
     <modules>
         <module>authorization-server</module>
+        <module>authentication-server</module>
     </modules>
     <dependencies>
         <dependency>

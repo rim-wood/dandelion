@@ -1,8 +1,8 @@
 package cn.icepear.dandelion.job.utils;
 
-import com.stpass.cityplatform.hoslink.common.core.exception.CustomException;
-import com.stpass.cityplatform.hoslink.common.core.utils.SpringContextHolder;
-import com.stpass.cityplatform.hoslink.common.core.utils.StringUtils;
+import cn.icepear.dandelion.common.core.exception.CustomException;
+import cn.icepear.dandelion.common.core.utils.SpringContextHolder;
+import cn.icepear.dandelion.common.core.utils.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;

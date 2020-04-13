@@ -1,10 +1,11 @@
 package cn.icepear.dandelion.upm.biz.config;
 
 import cn.icepear.dandelion.common.lock.DistributedLock;
+import cn.icepear.dandelion.common.lock.redis.RedissonDistributedLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * @author rim-wood
@@ -14,11 +15,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration
 public class LockConfig {
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedissonClient redissonClient;
 
     @Bean(name = "redisDistributedLock")
     public DistributedLock redisDistributedLock(){
-        return new RedisDistributedLock(redisTemplate);
+        return new RedissonDistributedLock(redissonClient);
     }
 
 }

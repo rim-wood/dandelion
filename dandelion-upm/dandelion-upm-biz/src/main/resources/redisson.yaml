@@ -1,0 +1,4 @@
+threads: 8
+nettyThreads: 8
+codec: !<org.redisson.codec.JsonJacksonCodec> {}
+"transportMode":"NIO"

@@ -25,7 +25,6 @@ spring:
     database: 0
     host: localhost
     port: 6379
-    password:  # 密码（默认为空）
     timeout: 6000ms  # 连接超时时长（毫秒）
     jedis:
       pool:
@@ -33,6 +32,8 @@ spring:
         max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-idle: 10      # 连接池中的最大空闲连接
         min-idle: 5       # 连接池中的最小空闲连接
+    redisson:
+      config: classpath:redisson.yaml
   dubbo:
     profile: classpath:dubbo/dubbo_base_dev.xml # dubbo针对不同环境的配置
 security:
@@ -42,8 +43,8 @@ security:
     client:
       client-id: hos
       client-secret: hos
-      access-token-uri: http://127.0.0.1:8080/auth/oauth/token
-      user-authorization-uri: http://127.0.0.1:8080/auth/oauth/authorize
+      access-token-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/token
+      user-authorization-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/authorize
     resource:
-      token-info-uri: http://127.0.0.1:8080/auth/oauth/check_token
+      token-info-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/check_token
       prefer-token-info: true

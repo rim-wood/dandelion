@@ -15,11 +15,13 @@ import java.util.concurrent.TimeUnit;
  * @date Created on 2020/4/6.
  */
 @Slf4j
-@Component
 public class RedissonDistributedLock extends AbstractDistributedLock {
-    @Autowired
     private RedissonClient redissonClient;
 
+    public RedissonDistributedLock(RedissonClient redissonClient){
+        super();
+        this.redissonClient = redissonClient;
+    }
 
     @Override
     public boolean lock(String key, long expire, int retryTimes, long sleepMillis) {

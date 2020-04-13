@@ -42,8 +42,8 @@ security:
     client:
       client-id: hos
       client-secret: hos
-      access-token-uri: http://127.0.0.1:8080/auth/oauth/token
-      user-authorization-uri: http://127.0.0.1:8080/auth/oauth/authorize
+      access-token-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/token
+      user-authorization-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/authorize
     resource:
-      token-info-uri: http://127.0.0.1:8080/auth/oauth/check_token
+      token-info-uri: http://127.0.0.1:8080/cn.icepear.dandelion.auth/oauth/check_token
       prefer-token-info: true

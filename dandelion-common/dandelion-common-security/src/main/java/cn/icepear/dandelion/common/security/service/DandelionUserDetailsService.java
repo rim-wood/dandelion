@@ -43,7 +43,6 @@ public class DandelionUserDetailsService implements UserDetailsService {
 	 * @throws UsernameNotFoundException
 	 */
 	@Override
-	@Cacheable(value = SecurityConstants.USER_DETAILS_KEY, key = "#username", unless = "#result == null")
 	@HystrixCommand(fallbackMethod = "userInfoError")
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		R<UserInfo> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
@@ -57,6 +56,8 @@ public class DandelionUserDetailsService implements UserDetailsService {
 	public UserDetails userInfoError(String username) {
 		throw new UsernameNotFoundException(username);
 	}
+
+
 	/**
 	 * 构建userdetails
 	 *
@@ -77,7 +78,21 @@ public class DandelionUserDetailsService implements UserDetailsService {
 		SysUser user = info.getSysUser();
 
 		// 构造security用户
-		return new DandelionUser(user.getId(), user.getDeptId(),user.getGrandparentDeptId(),user.getRealName(),user.getEmail(),user.getMobile(),user.getAvatar(),info.getRoles(), user.getUserName(), SecurityConstants.BCRYPT + user.getPassword(),
-				StrUtil.equals(user.getDelFlag(), CommonConstants.STATUS_NORMAL), true, true, StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL), authorities);
+		return new DandelionUser(
+				user.getId(),
+				user.getDeptId(),
+				user.getGrandparentDeptId(),
+				user.getRealName(),
+				user.getEmail(),
+				user.getMobile(),
+				user.getAvatar(),
+				info.getRoles(),
+				user.getUserName(),
+				SecurityConstants.BCRYPT + user.getPassword(),
+				StrUtil.equals(user.getDelFlag(), CommonConstants.STATUS_NORMAL),
+				true,
+				true,
+				StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL),
+				authorities);
 	}
 }
