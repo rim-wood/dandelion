@@ -3,6 +3,7 @@ package cn.icepear.dandelion.common.core.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
@@ -80,6 +81,7 @@ public class RedisConfig{
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        om.registerModule(new JavaTimeModule());
         jackson2JsonRedisSerializer.setObjectMapper(om);
         return jackson2JsonRedisSerializer;
     }

@@ -29,6 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Lazy
 	@Autowired
 	private AuthorizationServerTokenServices defaultAuthorizationServerTokenServices;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	@SneakyThrows
@@ -53,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder
 				.userDetailsService(userDetailsService)
-				.passwordEncoder(passwordEncoder());
+				.passwordEncoder(passwordEncoder);
 	}
 
 	@Bean
@@ -73,15 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //	}
 
 
-	/**
-	 * https://spring.io/blog/2017/11/01/spring-security-5-0-0-rc1-released#password-storage-updated
-	 * Encoded password does not look like BCrypt
-	 *
-	 * @return PasswordEncoder
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
+
 
 }

@@ -32,8 +32,8 @@ spring:
         max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-idle: 10      # 连接池中的最大空闲连接
         min-idle: 5       # 连接池中的最小空闲连接
-    redisson:
-      config: classpath:redisson.yaml
+    #redisson:
+    #  config: classpath:redisson.yaml
   dubbo:
     profile: classpath:dubbo/dubbo_base_dev.xml # dubbo针对不同环境的配置
 security:

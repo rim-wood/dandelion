@@ -47,7 +47,7 @@ redirect_uri 一般都是第三方自定义的登录界面，会通过js截取co
 
 - 拿到code以后，就可以调用/oauth/token
 
-POST/GET http://client:secret@localhost:8080/oauth/token 来换取access_token
+POST/GET http://localhost:8080/oauth/token 来换取access_token
 
 请求头：
 
@@ -55,6 +55,7 @@ POST/GET http://client:secret@localhost:8080/oauth/token 来换取access_token
 
 参数：
 
+    redirect_uri: http://www.baidu.com
     grant_type：authorization_code（上面提到的4种）
     code：7EE5Hy
 

@@ -13,7 +13,7 @@ public interface SecurityConstants {
 	/**
 	 * 前缀
 	 */
-	String PROJECT_PREFIX = "hos_";
+	String PROJECT_PREFIX = "dandelion_";
 
 	/**
 	 * oauth 相关前缀
@@ -23,7 +23,7 @@ public interface SecurityConstants {
 	/**
 	 * 项目的license
 	 */
-	String PROJECT_LICENSE = "made in stpass";
+	String PROJECT_LICENSE = "made in icepear";
 
 	/**
 	 * 内部
