@@ -11,9 +11,11 @@
 ### 技术
 
 - [x] ~~task任务服务~~
-- [x] 消息总线BUS & MQ
 - [x] ~~redis锁实现~~
 - [x] ~~增加Hystrix组件~~
+- [x] spring cloud gateway 网关实现 或者 KONG 实现
+- [x] 鉴权服务
+- [x] 消息总线BUS & MQ
 - [x] 日志系统
 - [x] 监控系统
 
