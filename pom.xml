@@ -15,6 +15,7 @@
         <module>dandelion-auth</module>
         <module>dandelion-upm</module>
         <module>dandelion-schedulejob</module>
+        <module>dandelion-gateway</module>
     </modules>
 
 

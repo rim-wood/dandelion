@@ -7,6 +7,9 @@
 2. 提供对常见容器化支持 Docker
 
 ## 二、Future
+### 架构图
+
+![](http://icepear.oss-cn-shenzhen.aliyuncs.com/springboot/springcloud%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
 
 ### 技术
 
