@@ -1,8 +1,8 @@
-package cn.icepear.dandelion.upm.biz.service.impl;
+package cn.icepear.dandelion.authorization.service.impl;
+import cn.icepear.dandelion.authorization.entity.OauthClientDetails;
+import cn.icepear.dandelion.authorization.mapper.SysOauthClientDetailsMapper;
+import cn.icepear.dandelion.authorization.service.SysOauthClientDetailsService;
 import cn.icepear.dandelion.common.security.constant.SecurityConstants;
-import cn.icepear.dandelion.upm.api.domain.entity.SysOauthClientDetails;
-import cn.icepear.dandelion.upm.biz.mapper.SysOauthClientDetailsMapper;
-import cn.icepear.dandelion.upm.biz.service.SysOauthClientDetailsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.List;
  * @date Created on 2019-04-18.
  */
 @Service
-public class SysOauthClientDetailsServiceImpl extends ServiceImpl<SysOauthClientDetailsMapper, SysOauthClientDetails> implements SysOauthClientDetailsService {
+public class SysOauthClientDetailsServiceImpl extends ServiceImpl<SysOauthClientDetailsMapper, OauthClientDetails> implements SysOauthClientDetailsService {
 
 	/**
 	 * 通过ID删除客户端
@@ -37,18 +37,18 @@ public class SysOauthClientDetailsServiceImpl extends ServiceImpl<SysOauthClient
 	 */
 	@Override
 	@CacheEvict(value = SecurityConstants.CLIENT_DETAILS_KEY, key = "#clientDetails.clientId")
-	public Boolean updateClientDetailsById(SysOauthClientDetails clientDetails) {
+	public Boolean updateClientDetailsById(OauthClientDetails clientDetails) {
 		return this.updateById(clientDetails);
 	}
 
 	@Override
-	public List<SysOauthClientDetails> getAllList() {
+	public List<OauthClientDetails> getAllList() {
 		return this.list();
 	}
 
 	@Override
-	public Boolean saveOauthClient(SysOauthClientDetails sysOauthClientDetails) {
-		return this.save(sysOauthClientDetails);
+	public Boolean saveOauthClient(OauthClientDetails oauthClientDetails) {
+		return this.save(oauthClientDetails);
 	}
 
 }

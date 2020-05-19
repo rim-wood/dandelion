@@ -10,10 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -33,6 +30,12 @@ public class DandelionTokenEndpoint {
     @GetMapping("/login")
     public String login(){
         return "forward:/login.html";
+    }
+
+    @GetMapping("/callback")
+    public String callback(@RequestParam String code){
+
+        return "forward:/index.html";
     }
 
     @PostMapping("/oauth/logout")

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.icepear.dandelion.upm.biz.mapper.SysOauthClientDetailsMapper">
+<mapper namespace="cn.icepear.dandelion.authorization.mapper.SysOauthClientDetailsMapper">
 
-	<resultMap id="sysOauthClientDetailsMap" type="cn.icepear.dandelion.upm.api.domain.entity.SysOauthClientDetails">
+	<resultMap id="oauthClientDetailsMap" type="cn.icepear.dandelion.authorization.entity.OauthClientDetails">
 		<id property="clientId" column="client_id"/>
 		<result property="resourceIds" column="resource_ids"/>
 		<result property="clientSecret" column="client_secret"/>

@@ -1,17 +1,25 @@
 package cn.icepear.dandelion.common.security.service;
 
+import cn.icepear.dandelion.common.core.utils.RedisUtils;
 import cn.icepear.dandelion.common.security.component.error.DandelionOAuth2Exception;
 import cn.icepear.dandelion.common.security.constant.ClientStatus;
 import cn.icepear.dandelion.common.security.constant.SecurityConstants;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.common.exceptions.ClientAuthenticationException;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 
 import javax.sql.DataSource;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,23 +34,29 @@ public class DandelionClientDetailsService extends JdbcClientDetailsService {
 		super(dataSource);
 	}
 
+	@Autowired
+	private RedisUtils redisUtils;
+
 	/**
-	 * 重写原生方法支持redis缓存
-	 * todo 该方法在第一次执行存在null异常，需要处理
+	 * 重写原生方法
+	 * 1.支持redis缓存
+	 * 2.添加AdditionalInformation信息判断客户端状态
 	 * @param clientId
 	 * @return
 	 */
 	@Override
 	@SneakyThrows
-	@Cacheable(value = SecurityConstants.CLIENT_DETAILS_KEY, key = "#clientId", unless = "#result == null")
-	public ClientDetails loadClientByClientId(String clientId) {
-		return super.loadClientByClientId(clientId);
-//		if(clientDetails!=null){
-//			Map<String,Object> additionalInformation = clientDetails.getAdditionalInformation();
-//			if(additionalInformation.containsKey("status")&&additionalInformation.get("status").equals(ClientStatus.EXPIRED.toString())){
-//				throw new InvalidClientException("client已过期");
-//			}
-//		}
-//		return clientDetails;
+	public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+		BaseClientDetails clientDetails = redisUtils.get(clientId,BaseClientDetails.class);
+		if(clientDetails == null) {
+			clientDetails = (BaseClientDetails) super.loadClientByClientId(clientId);
+			if (clientDetails != null && clientDetails.getAdditionalInformation() != null) {
+				if (clientDetails.getAdditionalInformation().containsKey("status") && !clientDetails.getAdditionalInformation().get("status").equals(ClientStatus.NORMAL.toString())) {
+					throw new ClientRegistrationException("client status is " + String.valueOf(clientDetails.getAdditionalInformation().get("status")));
+				}
+			}
+			redisUtils.set("client:details:"+clientId,clientDetails);
+		}
+		return clientDetails;
 	}
 }

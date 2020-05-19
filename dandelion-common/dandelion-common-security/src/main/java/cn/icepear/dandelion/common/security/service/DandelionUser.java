@@ -2,7 +2,9 @@ package cn.icepear.dandelion.common.security.service;
 
 import cn.icepear.dandelion.upm.api.domain.dto.RoleInfo;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +19,8 @@ import java.util.Set;
  * @date 2019-04-15
  * 医院联网扩展用户
  */
-@Data
+@Setter
+@Getter
 public class DandelionUser extends User implements Serializable{
 	/**
 	 * 用户ID

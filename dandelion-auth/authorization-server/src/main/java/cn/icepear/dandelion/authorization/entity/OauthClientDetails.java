@@ -1,4 +1,4 @@
-package cn.icepear.dandelion.upm.api.domain.entity;
+package cn.icepear.dandelion.authorization.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SysOauthClientDetails extends Model<SysOauthClientDetails> {
+public class OauthClientDetails extends Model<OauthClientDetails> {
 
 	private static final long serialVersionUID = 1L;
 
