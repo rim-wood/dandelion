@@ -35,7 +35,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
 	@Override
 	@Cacheable(value = "menu_details", key = "'role-' + #roleId  + '_menu'")
-	public List<MenuVO> getMenuByRoleId(Integer roleId) {
+	public List<MenuVO> getMenuByRoleId(Long roleId) {
 		return baseMapper.listMenusByRoleId(roleId);
 	}
 
@@ -50,8 +50,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 			return false;
 		}
 
-		sysRoleMenuMapper
-			.delete(Wrappers.<SysRoleMenu>query()
+		sysRoleMenuMapper.delete(Wrappers.<SysRoleMenu>query()
 				.lambda().eq(SysRoleMenu::getMenuId, id));
 
 		//删除当前菜单及其子菜单
@@ -77,7 +76,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 	}
 
 	@Override
-	public SysMenu getMenuByMenuId(int menuId) {
+	public SysMenu getMenuByMenuId(Long menuId) {
 		return this.getById(menuId);
 	}
 

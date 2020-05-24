@@ -27,8 +27,8 @@ public class SysMenu extends Model<SysMenu> {
 	 * 菜单ID
 	 */
 	@NotNull(message = "菜单ID不能为空")
-	@TableId(value = "menu_id", type = IdType.INPUT)
-	private Integer menuId;
+	@TableId(value = "menu_id", type = IdType.ID_WORKER)
+	private Long menuId;
 	/**
 	 * 菜单名称
 	 */
@@ -39,7 +39,7 @@ public class SysMenu extends Model<SysMenu> {
 	 * 父菜单ID
 	 */
 	@NotNull(message = "菜单父ID不能为空")
-	private Integer parentId;
+	private Long parentId;
 
 	/**
 	 * 菜单类型   0：目录   1：菜单   2：按钮

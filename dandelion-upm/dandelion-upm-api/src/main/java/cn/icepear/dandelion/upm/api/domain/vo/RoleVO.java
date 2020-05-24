@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class RoleVO implements Serializable {
-    private Integer roleId;
+    private Long roleId;
 
     private String roleName;
 
@@ -53,6 +53,14 @@ public class RoleVO implements Serializable {
      */
     private Integer sysDefault;
 
-    private List<Integer> menuIdList;
+    /**
+     * 拥有菜单权限列表
+     */
+    private List<Long> menuIdList;
+
+    /**
+     * 拥有功能权限列表
+     */
+    private List<Long> functionIdList;
 }
 

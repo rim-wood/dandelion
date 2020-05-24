@@ -24,7 +24,7 @@
 		<result column="updator" property="updator"/>
 		<result column="del_flag" property="delFlag"/>
 		<result column="sys_default" property="sysDefault"/>
-		<collection property="menuIdList" ofType="int">
+		<collection property="menuIdList" ofType="long">
 			<constructor>
 				<arg column="menu_id"/>
 			</constructor>
@@ -48,14 +48,6 @@
 		#{updator,jdbcType=VARCHAR},#{delFlag,jdbcType=INTEGER},#{sysDefault,jdbcType=INTEGER})
 	</insert>
 
-
-	<insert id="saveSysRoleMenu" parameterType="java.util.List">
-		insert into sys_role_menu (role_id, menu_id)
-		values
-		<foreach collection="list" item="item" index="index" separator=",">
-			(#{item.roleId}, #{item.menuId})
-		</foreach>
-	</insert>
 
 	<update id="updateRole" parameterType="cn.icepear.dandelion.upm.api.domain.vo.RoleVO">
 		UPDATE  sys_role
@@ -91,10 +83,6 @@
 		WHERE
 		role_id = #{roleId}
 	</update>
-
-	<delete id="deleteRoleIdMenu">
-		DELETE from sys_role_menu where role_id = #{roleId}
-	</delete>
 
 	<select id="getSysRoleById" resultMap="RoleVOMap">
 		SELECT

@@ -23,8 +23,8 @@ public class SysRole extends Model<SysRole> {
 
 	private static final long serialVersionUID = 1L;
 
-	@TableId(value = "role_id", type = IdType.AUTO)
-	private Integer roleId;
+	@TableId(value = "role_id", type = IdType.ID_WORKER)
+	private Long roleId;
 
 	@NotBlank(message = "角色名称 不能为空")
 	private String roleName;

@@ -31,15 +31,6 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 	 */
 	int saveSysRole(RoleVO roleVO);
 
-	/**
-	 * 添加角色与菜单关联
-	 */
-	int saveSysRoleMenu(List<SysRoleMenu> sysRoleMenus);
-
-	/**
-	 * 使用角色id删除角色-菜单关联表数据
-	 */
-	int deleteRoleIdMenu(Integer roleId);
 
 	/**
 	 * 更新角色信息

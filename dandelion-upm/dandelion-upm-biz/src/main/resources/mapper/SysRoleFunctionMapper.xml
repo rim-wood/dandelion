@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.icepear.dandelion.upm.biz.mapper.SysRoleMenuMapper">
+
+
+    <insert id="saveSysRoleFunction" parameterType="java.util.List">
+        insert into sys_role_function (role_id, function_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.roleId}, #{item.functionId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByFunctionId">
+        DELETE from sys_role_function where function_id = #{functionId}
+    </delete>
+
+    <delete id="deleteFunctionByRoleId">
+		DELETE from sys_role_function where role_id = #{roleId}
+	</delete>
+</mapper>

@@ -24,7 +24,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 	 * @param roleId 角色ID
 	 * @return
 	 */
-	List<MenuVO> listMenusByRoleId(Integer roleId);
+	List<MenuVO> listMenusByRoleId(Long roleId);
 
 	/**
 	 * 通过角色ID查询权限
@@ -58,5 +58,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 	/**
 	 * 父结点查所有子节点
 	 */
-	List<SysMenu> sonMenuList(@Param("menuId") Integer menuId);
+	List<SysMenu> sonMenuList(@Param("menuId") Long menuId);
 }
