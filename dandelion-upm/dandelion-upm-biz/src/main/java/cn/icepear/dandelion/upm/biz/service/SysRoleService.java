@@ -20,7 +20,7 @@ public interface SysRoleService extends IService<SysRole> {
 	 * @param userId
 	 * @return
 	 */
-	List<SysRole> listRolesByUserId(Integer userId);
+	List<SysRole> listRolesByUserId(Long userId);
 
 	/**
 	 * 通过角色ID，删除角色
@@ -28,7 +28,7 @@ public interface SysRoleService extends IService<SysRole> {
 	 * @param id
 	 * @return
 	 */
-	Boolean removeRoleById(Integer id);
+	Boolean removeRoleById(Long id);
 
 	/**
 	 * 添加角色
@@ -43,10 +43,10 @@ public interface SysRoleService extends IService<SysRole> {
 	/**
 	 * 通过角色Id，查询角色信息
 	 */
-	RoleVO getSysRoleById(Integer roleId);
+	RoleVO getSysRoleById(Long roleId);
 
 	/**
 	 * 根据机构id获取角色列表
 	 */
-	List<SysRole> getAllList(Integer deptId);
+	List<SysRole> getAllList(Long deptId);
 }

@@ -142,9 +142,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 * @return
 	 */
 	@Override
-	public IPage<List<UserVO>> getUserWithRolePage(Page page, String userName, Integer deptId) {
+	public IPage<List<UserVO>> getUserWithRolePage(Page page, String userName, Long deptId) {
 		List<SysDept> sysDeptList = sysDeptService.getCurrentUserSysDeptList(deptId);
-		List<Integer> deptIds = sysDeptList.stream().map(dept -> dept.getDeptId()).collect(Collectors.toList());
+		List<Long> deptIds = sysDeptList.stream().map(dept -> dept.getDeptId()).collect(Collectors.toList());
 		return baseMapper.getUserVosPage(page, userName,deptIds);
 	}
 
@@ -155,7 +155,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 * @return 用户信息
 	 */
 	@Override
-	public UserVO getUserVoById(Integer id) {
+	public UserVO getUserVoById(Long id) {
 		return baseMapper.getUserVoByUsernameOrId(null,id);
 	}
 
@@ -186,11 +186,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	@Override
 	@CacheEvict(value = "user_details", key = "#userDto.userName")
 	public boolean updateUserInfo(UserDTO userDto) {
-		UserVO userVO = baseMapper.getUserVoByUsernameOrId(userDto.getUserName(),null);
+		SysUser existSysUser = baseMapper.getSysUserByUsernameOrId(userDto.getUserName(),null);
 		SysUser sysUser = new SysUser();
 		if (StrUtil.isNotBlank(userDto.getPassword())
 			&& StrUtil.isNotBlank(userDto.getNewpassword())) {
-			if (ENCODER.matches(userDto.getPassword(), userVO.getPassword())) {
+			if (ENCODER.matches(userDto.getPassword(), existSysUser.getPassword())) {
 				sysUser.setPassword(ENCODER.encode(userDto.getNewpassword()));
 			} else {
 				log.warn("原密码错误，修改密码失败:{}", userDto.getUserName());
@@ -200,7 +200,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 		sysUser.setMobile(userDto.getMobile());
 		sysUser.setEmail(userDto.getEmail());
 		sysUser.setRealName(userDto.getRealName());
-		sysUser.setId(userVO.getUserId());
+		sysUser.setId(existSysUser.getId());
 		sysUser.setAvatar(userDto.getAvatar());
 		return this.updateById(sysUser);
 	}
@@ -244,7 +244,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 			return null;
 		}
 
-		Integer parentId = sysDept.getParentId();
+		Long parentId = sysDept.getParentId();
 		return this.list(Wrappers.<SysUser>query().lambda()
 			.eq(SysUser::getDeptId, parentId));
 	}
@@ -255,7 +255,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 	 * @return 子部门列表
 	 */
 	private List<Integer> getChildDepts() {
-		Integer deptId = SecurityUtils.getUser().getDeptId();
+		Long deptId = SecurityUtils.getUser().getDeptId();
 		//获取当前部门的子部门
 		return null;
 	}

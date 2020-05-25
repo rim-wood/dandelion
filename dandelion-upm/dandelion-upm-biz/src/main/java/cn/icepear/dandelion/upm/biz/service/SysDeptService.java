@@ -32,14 +32,14 @@ public interface SysDeptService extends IService<SysDept> {
 	 *
 	 * @return DeptTree 树
 	 */
-	List<DeptTree> getCurrentUserDeptTrees(Integer deptId);
+	List<DeptTree> getCurrentUserDeptTrees(Long deptId);
 
 	/**
 	 * 查询用户部门树
 	 *
 	 * @return DeptTree 树
 	 */
-	List<SysDept> getCurrentUserSysDeptList(Integer deptId);
+	List<SysDept> getCurrentUserSysDeptList(Long deptId);
 
 	/**
 	 * 添加信息部门
@@ -55,7 +55,7 @@ public interface SysDeptService extends IService<SysDept> {
 	 * @param id 部门 ID
 	 * @return 成功、失败
 	 */
-	Boolean removeDeptById(Integer id);
+	Boolean removeDeptById(Long id);
 
 	/**
 	 * 更新部门
@@ -70,13 +70,13 @@ public interface SysDeptService extends IService<SysDept> {
 	 * @param deptId
 	 * @return
 	 */
-	List<SysDept>  getParentDeptList(Integer deptId);
+	List<SysDept>  getParentDeptList(Long deptId);
 
 	/**
 	 * 根据deptId获取机构信息
 	 * @param deptId
 	 * @return
 	 */
-	SysDept getSysDeptById(Integer deptId);
+	SysDept getSysDeptById(Long deptId);
 
 }

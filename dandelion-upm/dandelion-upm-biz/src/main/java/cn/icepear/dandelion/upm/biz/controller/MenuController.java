@@ -62,7 +62,7 @@ public class MenuController {
     @GetMapping("/info/{menuId}")
     @SysLog("MenuId获取菜单信息")
 //    @PreAuthorize("@mse.hasPermission('sys:menu:info')")
-    public R getSysDeptById(@PathVariable int menuId){
+    public R getSysDeptById(@PathVariable Long menuId){
         SysMenu sysMenu = sysMenuService.getMenuByMenuId(menuId);
         if (sysMenu != null){
             return new R<>("查询成功",sysMenu);

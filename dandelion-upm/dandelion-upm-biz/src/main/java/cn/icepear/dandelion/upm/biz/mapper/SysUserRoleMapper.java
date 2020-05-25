@@ -19,5 +19,5 @@ public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
 	 * @param userId 用户ID
 	 * @return boolean
 	 */
-	Boolean deleteByUserId(@Param("userId") Integer userId);
+	Boolean deleteByUserId(@Param("userId") Long userId);
 }

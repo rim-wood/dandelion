@@ -44,7 +44,7 @@ public class RoleController {
      * 根据roleId获取角色信息
      */
     @GetMapping("/info/{roleId}")
-    public R<RoleVO> getSysRoleById(@PathVariable int roleId){
+    public R<RoleVO> getSysRoleById(@PathVariable Long roleId){
         RoleVO roleVO = sysRoleService.getSysRoleById(roleId);
         if (roleVO != null){
             return new R<>(CommonConstants.SUCCESS,"查询成功",roleVO);

@@ -26,8 +26,8 @@ public class SysDept extends Model<SysDept> {
 	/**
 	 * 部门ID
 	 */
-	@TableId(value = "dept_id", type = IdType.AUTO)
-	private Integer deptId;
+	@TableId(value = "dept_id", type = IdType.ID_WORKER)
+	private Long deptId;
 
 	/**
 	 * 部门名称
@@ -38,7 +38,7 @@ public class SysDept extends Model<SysDept> {
 	/**
 	 * 部门父级部门Id
 	 */
-	private Integer parentId;
+	private Long parentId;
 
 	/**
 	 * 部门类型

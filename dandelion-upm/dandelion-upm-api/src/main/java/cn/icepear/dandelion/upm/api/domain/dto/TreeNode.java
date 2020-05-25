@@ -13,8 +13,8 @@ import java.util.List;
  */
 @Data
 public class TreeNode<T> implements Serializable {
-	protected int id;
-	protected int parentId;
+	protected Long id;
+	protected Long parentId;
 	protected List<T> children = new ArrayList<T>();
 
 	public void add(T node) {

@@ -35,7 +35,7 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
 	  *
 	  * @return 部门父级数据列表
 	  */
- 	List<SysDept> parentListDepts(@Param("deptId") Integer deptId, @Param("delFlag") Integer delFlag);
+ 	List<SysDept> parentListDepts(@Param("deptId") Long deptId, @Param("delFlag") Integer delFlag);
 
 
 	 /**
@@ -44,5 +44,5 @@ public interface SysDeptMapper extends BaseMapper<SysDept> {
 	  * @param
 	  * @return 部门父级数据列表
 	  */
-	 List<SysDept> sonListDepts(Integer deptId);
+	 List<SysDept> sonListDepts(Long deptId);
 }

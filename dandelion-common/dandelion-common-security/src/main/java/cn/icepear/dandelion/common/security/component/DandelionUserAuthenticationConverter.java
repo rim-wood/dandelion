@@ -74,9 +74,9 @@ public class DandelionUserAuthenticationConverter implements UserAuthenticationC
 			Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
 
 			String username = (String) map.get(USERNAME);
-			Integer id = (Integer) map.get(USER_ID);
-			Integer deptId = (Integer) map.get(DEPT_ID);
-			Integer grandparentDeptId = (Integer) map.get(GRANDPARENT_DEPT_ID);
+			Long id = (Long) map.get(USER_ID);
+			Long deptId = (Long) map.get(DEPT_ID);
+			Long grandparentDeptId = (Long) map.get(GRANDPARENT_DEPT_ID);
 			String realName = (String) map.get(REAL_NAME);
 			String email = (String) map.get(EMAIL);
 			String mobile = (String) map.get(MOBILE);

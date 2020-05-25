@@ -49,11 +49,11 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 	@CacheEvict(value = {"dept_trees","dept_list"}, allEntries = true)
 	@Transactional(rollbackFor = Exception.class)
 	//todo 删除部门对应的账号也要失效
-	public Boolean removeDeptById(Integer id) {
+	public Boolean removeDeptById(Long id) {
 		List<SysDept> syslist = baseMapper.sonListDepts(id);
 
 		//级联删除部门
-		List<Integer> idList = new ArrayList<>();
+		List<Long> idList = new ArrayList<>();
 		for (SysDept sysDept : syslist) {
 			idList.add(sysDept.getDeptId());
 		}
@@ -85,7 +85,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 	}
 
 	@Override
-	public List<SysDept> getParentDeptList(Integer deptId) {
+	public List<SysDept> getParentDeptList(Long deptId) {
 		return baseMapper.parentListDepts(deptId, 0);
 	}
 
@@ -95,7 +95,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 	 * @return
 	 */
 	@Override
-	public SysDept getSysDeptById(Integer deptId) {
+	public SysDept getSysDeptById(Long deptId) {
 		return baseMapper.selectById(deptId);
 	}
 
@@ -133,7 +133,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 	 */
 	@Override
 	@Cacheable(value = "dept_trees", key = "#deptId+'_son_tree'")
-	public List<DeptTree> getCurrentUserDeptTrees(Integer deptId) {
+	public List<DeptTree> getCurrentUserDeptTrees(Long deptId) {
 		List<SysDept> list = baseMapper.sonListDepts(deptId);
 		if(list.size() != 0){
 			List<DeptTree> treeNode = list.stream().map(dept -> SysDept.sysDept2DeptTree(dept)).collect(Collectors.toList());
@@ -151,7 +151,7 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
 	 */
 	@Override
 	@Cacheable(value = "dept_list", key = "#deptId+'_son_treelist'")
-	public List<SysDept> getCurrentUserSysDeptList(Integer deptId) {
+	public List<SysDept> getCurrentUserSysDeptList(Long deptId) {
 		List<SysDept> list = baseMapper.sonListDepts(deptId);
 		if(list.size() != 0){
 			return  list;

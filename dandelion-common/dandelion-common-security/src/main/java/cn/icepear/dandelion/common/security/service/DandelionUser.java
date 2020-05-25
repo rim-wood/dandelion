@@ -25,15 +25,15 @@ public class DandelionUser extends User implements Serializable{
 	/**
 	 * 用户ID
 	 */
-	private Integer id;
+	private Long id;
 	/**
 	 * 部门ID
 	 */
-	private Integer deptId;
+	private Long deptId;
 	/**
 	 * 部门ID
 	 */
-	private Integer grandparentDeptId;
+	private Long grandparentDeptId;
 	/**
 	 * 真实姓名
 	 */
@@ -81,7 +81,7 @@ public class DandelionUser extends User implements Serializable{
 	 * @throws IllegalArgumentException if a <code>null</code> value was passed either as
 	 *                                  a parameter or as an element in the <code>GrantedAuthority</code> collection
 	 */
-	public DandelionUser(Integer id, Integer deptId, Integer grandparentDeptId, String realName, String email, String mobile, String avatar, List<RoleInfo> roles,
+	public DandelionUser(Long id, Long deptId, Long grandparentDeptId, String realName, String email, String mobile, String avatar, List<RoleInfo> roles,
 					   String username, String password, boolean enabled, boolean accountNonExpired,
 					   boolean credentialsNonExpired, boolean accountNonLocked,
 					   Collection<? extends GrantedAuthority> authorities) {

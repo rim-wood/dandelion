@@ -25,7 +25,17 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	 * @return userVo
 	 */
 	UserVO getUserVoByUsernameOrId(@Param("userName") String userName,
-								   @Param("userId") Integer userId);
+								   @Param("userId") Long userId);
+
+	/**
+	 * 通过用户名查询基本用户信息
+	 *
+	 * @param userName 用户名
+	 * @param userId 用户编号
+	 * @return sysUser
+	 */
+	SysUser getSysUserByUsernameOrId(@Param("userName") String userName,
+								   @Param("userId") Long userId);
 
 	/**
 	 * 分页查询用户信息（含角色）
@@ -35,6 +45,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 	 * @param deptIds  要查看的机构编号
 	 * @return list
 	 */
-	IPage<List<UserVO>> getUserVosPage(Page page, @Param("userName") String userName,@Param("deptIds")List<Integer> deptIds);
+	IPage<List<UserVO>> getUserVosPage(Page page, @Param("userName") String userName,@Param("deptIds")List<Long> deptIds);
 
 }

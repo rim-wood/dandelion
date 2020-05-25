@@ -30,14 +30,14 @@ public class MenuTree extends TreeNode<MenuTree> implements Serializable {
 	public MenuTree() {
 	}
 
-	public MenuTree(int id, String name, int parentId) {
+	public MenuTree(Long id, String name, Long parentId) {
 		this.id = id;
 		this.parentId = parentId;
 		this.menuName = menuName;
 		this.label = menuName;
 	}
 
-	public MenuTree(int id, String menuName, MenuTree parent) {
+	public MenuTree(Long id, String menuName, MenuTree parent) {
 		this.id = id;
 		this.parentId = parent.getId();
 		this.menuName = menuName;

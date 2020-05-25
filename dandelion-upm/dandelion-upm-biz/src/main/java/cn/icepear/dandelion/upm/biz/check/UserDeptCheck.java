@@ -12,13 +12,13 @@ import java.util.stream.Collectors;
 @Data
 public class UserDeptCheck implements AbstractCheck {
 
-    private Integer deptId;
+    private Long deptId;
 
     private SysDeptService sysDeptService;
 
     private DandelionUser dandelionUser;
 
-    public UserDeptCheck(Integer deptId, SysDeptService sysDeptService) {
+    public UserDeptCheck(Long deptId, SysDeptService sysDeptService) {
         this.deptId = deptId;
         this.sysDeptService = sysDeptService;
         this.dandelionUser = SecurityUtils.getUser();

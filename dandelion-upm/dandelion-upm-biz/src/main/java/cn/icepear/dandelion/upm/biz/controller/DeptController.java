@@ -88,7 +88,7 @@ public class DeptController {
      */
     @GetMapping("/info/{deptId}")
     @PreAuthorize("@mse.hasPermission('sys:dept:info')")
-    public R<SysDept> getSysDeptById(@PathVariable int deptId,@JudgeUserRole(role = "ADMIN") boolean isAdmin){
+    public R<SysDept> getSysDeptById(@PathVariable Long deptId,@JudgeUserRole(role = "ADMIN") boolean isAdmin){
         if(!isAdmin){
             UserDeptCheck userDeptCheck = new UserDeptCheck(deptId, sysDeptService);
             AbstractCheck.CheckResult check = userDeptCheck.check();

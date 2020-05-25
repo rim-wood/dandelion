@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author rim-wood
@@ -86,13 +87,11 @@ public class UserController {
     @PreAuthorize("@mse.hasPermission('sys:user:update')")
     @SysLog("更新用户信息")
     public R updateUser(@RequestBody UserDTO userDTO, @JudgeUserRole(role = "ADMIN") boolean isAdmin){
+        //不是超级管理员只能更新
         if(!isAdmin){
             DandelionUser user = SecurityUtils.getUser();
             List<SysRole> sysRoles=  sysRoleService.getAllList(user.getGrandparentDeptId());
-            List<Integer> role= new ArrayList<>();
-            sysRoles.forEach(sysRole -> {
-                role.add(sysRole.getRoleId());
-            });
+            List<Long> role= sysRoles.stream().map(sysRole -> sysRole.getRoleId()).collect(Collectors.toList());
             if(role.containsAll(userDTO.getRole())){
                 return R.error(1001,"更新失败", null);
             }
@@ -130,7 +129,7 @@ public class UserController {
 
     @GetMapping("/page")
     @PreAuthorize("@mse.hasPermission('sys:user:page')")
-    public R getUserList(Page page, String userName,Integer deptId,@JudgeUserRole boolean isAdmin){
+    public R getUserList(Page page, String userName,Long deptId,@JudgeUserRole boolean isAdmin){
         //判断是否是超级管理员，查看所有数据
         if(!isAdmin){
             DandelionUser curUser = SecurityUtils.getUser();
@@ -153,7 +152,7 @@ public class UserController {
 
     @GetMapping("/info/{userId}")
     @PreAuthorize("@mse.hasPermission('sys:user:info')")
-    public R<UserVO> getUserInfo(@PathVariable int userId,@JudgeUserRole boolean isAdmin){
+    public R<UserVO> getUserInfo(@PathVariable Long userId,@JudgeUserRole boolean isAdmin){
         DandelionUser curUser = SecurityUtils.getUser();
         UserVO user = sysUserService.getUserVoById(userId);
         if(user!=null){

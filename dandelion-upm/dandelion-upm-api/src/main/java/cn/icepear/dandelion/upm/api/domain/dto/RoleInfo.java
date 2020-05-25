@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @Data
 public class RoleInfo implements Serializable {
-    private Integer roleId;
+    private Long roleId;
 
     private String roleName;
 

@@ -22,7 +22,7 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 	 * @param userId
 	 * @return
 	 */
-	List<SysRole> listRolesByUserId(Integer userId);
+	List<SysRole> listRolesByUserId(Long userId);
 
 
 
@@ -40,12 +40,12 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 	/**
 	 * 通过角色Id，查询角色信息
 	 */
-	RoleVO getSysRoleById(Integer roleId);
+	RoleVO getSysRoleById(Long roleId);
 
 	/**
 	 * 只查所在科室
 	 */
-	List<SysRole> getSysRoleByDeptId(@Param("deptId") Integer deptId);
+	List<SysRole> getSysRoleByDeptId(@Param("deptId") Long deptId);
 
 	/**
 	 * 查询角色

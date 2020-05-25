@@ -39,7 +39,7 @@ public interface SysUserService extends IService<SysUser> {
 	 * @param deptId  要查看的机构编号
 	 * @return
 	 */
-	IPage<List<UserVO>> getUserWithRolePage(Page page, String userName,Integer deptId);
+	IPage<List<UserVO>> getUserWithRolePage(Page page, String userName,Long deptId);
 
 	/**
 	 * 删除用户
@@ -71,7 +71,7 @@ public interface SysUserService extends IService<SysUser> {
 	 * @param id 用户ID
 	 * @return 用户信息
 	 */
-	UserVO getUserVoById(Integer id);
+	UserVO getUserVoById(Long id);
 
 	/**
 	 * 查询上级部门的用户信息

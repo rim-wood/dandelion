@@ -22,25 +22,15 @@ public class UserVO implements Serializable {
 	/**
 	 * 主键ID
 	 */
-	private Integer userId;
+	private Long userId;
 	/**
 	 * 用户名
 	 */
 	private String userName;
 	/**
-	 * 密码
-	 */
-	private String password;
-	/**
 	 * 真实姓名
 	 */
 	private String realName;
-
-	/**
-	 * 随机盐
-	 */
-	@JsonIgnore
-	private String salt;
 
 	/**
 	 * 邮箱
@@ -73,17 +63,6 @@ public class UserVO implements Serializable {
 	private String creator;
 
 	/**
-	 * 修改时间
-	 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime updateTime;
-
-	/**
-	 * 修改人
-	 */
-	private String updator;
-
-	/**
 	 * 0-正常，1-删除
 	 */
 	@TableLogic
@@ -92,7 +71,7 @@ public class UserVO implements Serializable {
 	/**
 	 * 部门ID
 	 */
-	private Integer deptId;
+	private Long deptId;
 
 	/**
 	 * 部门名称
@@ -101,7 +80,7 @@ public class UserVO implements Serializable {
 	/**
 	 * 最顶级机构ID
 	 */
-	private Integer grandparentDeptId;
+	private Long grandparentDeptId;
 
 	/**
 	 * 最顶级机构名称
