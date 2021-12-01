@@ -38,7 +38,7 @@
         <jackson.version>2.9.8</jackson.version>
         <joda.time.version>2.9.9</joda.time.version>
         <mybatis.typehandlers-jsr310.version>1.0.2</mybatis.typehandlers-jsr310.version>
-        <dubbo.version>2.7.3</dubbo.version>
+        <dubbo.version>2.7.13</dubbo.version>
         <quartz.version>2.3.0</quartz.version>
     </properties>
 
